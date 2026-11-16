@@ -20,7 +20,7 @@
   padding-bottom:env(safe-area-inset-bottom,0px);
 }
 *,*::before,*::after{box-sizing:inherit}
-html{background:var(--paper);scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + var(--nav-h) + 14px)}
+html{background:var(--paper);scroll-behavior:auto;scroll-padding-top:calc(env(safe-area-inset-top,0px) + var(--nav-h) + 14px)}
 body{
   margin:0;background:var(--paper);color:var(--ink);
   font-family:"Huninn","jf-openhuninn","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;
@@ -185,6 +185,7 @@ svg .a{transform-box:fill-box;transform-origin:center}
 .a-snow{animation:snow 6s linear infinite}
 .a-nod{animation:nod 4s ease-in-out infinite;transform-origin:20% 90%!important}
 
+html.is-scrolling svg .a{animation-play-state:paused!important}
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -292,15 +293,22 @@ const TRIPS = [
       { t:"14:00", title:"酷航桃園機場T1", note:"14:00–18:00（台北時間）。行事曆未寫航班代號與抵達機場。", move:["plane"] },
       { t:"住宿", title:"入住 東橫大手町", note:"全日活動，退房日 12月18日" }
     ]},
-    { date:"12/17", week:"週四", title:"東橫大手町", area:"東橫大手町", art:"", items:[
-      { t:"住宿", title:"東橫大手町", note:"續住，退房日 12月18日" }
+    { date:"12/17", week:"週四", title:"入住 Toemu Nozawa", area:"東橫大手町・長野", art:"", items:[
+      { t:"住宿", title:"東橫大手町", note:"續住，退房日 12月18日。與 Toemu Nozawa 12/17~12/21 重疊一晚。" },
+      { t:"15:00", title:"入住 Toemu Nozawa", note:"已確認。12/17~12/21，退房 12/21 10:00。長野。2 間房，皆為 1 x Triple Room with Shared Bathroom（3 位大人、2 位大人）。" }
     ]},
-    { date:"12/18", week:"週五", title:"東橫大手町退房", area:"東京", art:"", items:[
-      { t:"退房", title:"東橫大手町 退房", note:"全日活動的退房日為 12月18日。這天到 12月20日，行事曆沒有下一筆住宿或活動。" }
+    { date:"12/18", week:"週五", title:"東橫大手町退房", area:"長野 Toemu Nozawa", art:"", items:[
+      { t:"退房", title:"東橫大手町 退房", note:"全日活動的退房日為 12月18日。" },
+      { t:"住宿", title:"Toemu Nozawa", note:"續住，12/17~12/21，退房 12/21 10:00。" }
     ]},
-    { date:"12/19", week:"週六", title:"行事曆尚無行程", area:"", art:"", items:[]},
-    { date:"12/20", week:"週日", title:"行事曆尚無行程", area:"", art:"", items:[]},
-    { date:"12/21", week:"週一", title:"入住 Belken Hotel Kanda", area:"Belken Hotel Kanda", art:"", items:[
+    { date:"12/19", week:"週六", title:"Toemu Nozawa", area:"長野", art:"", items:[
+      { t:"住宿", title:"Toemu Nozawa", note:"續住，12/17~12/21，退房 12/21 10:00。" }
+    ]},
+    { date:"12/20", week:"週日", title:"Toemu Nozawa", area:"長野", art:"", items:[
+      { t:"住宿", title:"Toemu Nozawa", note:"續住，12/17~12/21，退房 12/21 10:00。" }
+    ]},
+    { date:"12/21", week:"週一", title:"Toemu Nozawa 退房、入住 Belken Hotel Kanda", area:"長野・Belken Hotel Kanda", art:"", items:[
+      { t:"10:00", title:"Toemu Nozawa 退房", note:"12/17~12/21，退房 10:00。" },
       { t:"住宿", title:"入住 Belken Hotel Kanda", note:"全日活動，退房日 12月24日" }
     ]},
     { date:"12/22", week:"週二", title:"Belken Hotel Kanda", area:"Belken Hotel Kanda", art:"", items:[
@@ -315,13 +323,16 @@ const TRIPS = [
     { name:"東橫大手町", city:"東京", nights:"12/16 – 12/18・2 晚", color:"#F2A497",
       checkin:"12月16日（全日）", checkout:"12月18日（全日活動結束日）", addr:"行事曆未寫", access:"行事曆未寫",
       memo:"行事曆標題為「住宿：東橫大手町」", map:"東橫大手町" },
+    { name:"Toemu Nozawa", city:"長野", nights:"12/17~12/21・4 晚", color:"#B9DAA5",
+      checkin:"12/17 15:00", checkout:"12/21 10:00", addr:"長野", access:"截圖未寫",
+      memo:"已確認。2 間房，皆為 1 x Triple Room with Shared Bathroom（3 位大人、2 位大人）。資料來自訂房截圖。", map:"Toemu Nozawa 長野" },
     { name:"Belken Hotel Kanda", city:"東京", nights:"12/21 – 12/24・3 晚", color:"#A8D3E6",
       checkin:"12月21日（全日）", checkout:"12月24日（全日活動結束日）", addr:"行事曆未寫", access:"行事曆未寫",
       memo:"12月23日晚間已有酷航回程", map:"Belken Hotel Kanda" }
   ],
   lists: {
     todo: [
-      { text:"12月18日至20日 住宿未填", note:"行事曆未填" },
+      { text:"待確認：東橫大手町 12/16–12/18 與 Toemu Nozawa 12/17~12/21 重疊一晚", note:"待確認" },
       { text:"Belken Hotel Kanda 退房日為 12月24日，但 12月23日 18:55 已有酷航回程", note:"行事曆未填" },
       { text:"酷航去程未寫航班代號與抵達機場", note:"行事曆未填" },
       { text:"酷航回程未寫航班代號與抵達地", note:"行事曆未填" }
@@ -837,17 +848,18 @@ switchEl.addEventListener("click", e=>{
 /* ---------- 首頁與倒數 ---------- */
 const cdEl = document.getElementById("countdown");
 const tiles = [["天",C.coral],["時",C.yellow],["分",C.mizu],["秒",C.green]];
-let cdMode = null;
+let cdMode = null, cdStart = 0, cdEnd = 0, cdNums = null;
 function tick(){
-  const now = Date.now(), s0 = new Date(trip.start).getTime(), e0 = new Date(trip.end).getTime();
+  const now = Date.now(), s0 = cdStart, e0 = cdEnd;
   if (now < s0){
     if (cdMode !== "count"){
       cdMode = "count";
       cdEl.innerHTML = `<p class="cd-label">距離出發還有</p><div class="cd-grid">${tiles.map(([u,c])=>`<div class="cd-tile" style="background:${c}"><b>0</b><span>${u}</span></div>`).join("")}</div>`;
+      cdNums = [...cdEl.querySelectorAll(".cd-tile b")];
     }
     const s = Math.floor((s0-now)/1000);
-    const v = [Math.floor(s/86400), Math.floor(s%86400/3600), Math.floor(s%3600/60), s%60];
-    cdEl.querySelectorAll(".cd-tile b").forEach((b,i)=>{ b.textContent = i===0 ? v[i] : String(v[i]).padStart(2,"0"); });
+    const v = [String(Math.floor(s/86400)), String(Math.floor(s%86400/3600)).padStart(2,"0"), String(Math.floor(s%3600/60)).padStart(2,"0"), String(s%60).padStart(2,"0")];
+    cdNums.forEach((b,i)=>{ if (b.textContent !== v[i]) b.textContent = v[i]; });
   } else if (now < e0){
     if (cdMode !== "on"){ cdMode="on"; const d = Math.floor((now-s0)/86400000)+1; cdEl.innerHTML = `<div class="cd-msg">旅途進行中，今天是第 ${d} 天，玩得開心！</div>`; }
   } else if (cdMode !== "done"){ cdMode="done"; cdEl.innerHTML = `<div class="cd-msg">旅程結束，歡迎回家！</div>`; }
@@ -890,7 +902,9 @@ function renderDay(i, animate){
 tabsEl.addEventListener("click", e=>{
   const t = e.target.closest(".tab"); if (!t) return;
   renderDay(+t.dataset.i, true);
-  t.scrollIntoView({block:"nearest", inline:"center", behavior: reduceMotion.matches ? "auto" : "smooth"});
+  const row = tabsEl.getBoundingClientRect(), tr = t.getBoundingClientRect();
+  const left = tabsEl.scrollLeft + (tr.left + tr.right)/2 - (row.left + row.right)/2;
+  tabsEl.scrollTo({ left: Math.max(0, left), behavior: reduceMotion.matches ? "auto" : "smooth" });
 });
 tabsEl.addEventListener("keydown", e=>{
   if (!["ArrowLeft","ArrowRight"].includes(e.key)) return;
@@ -953,7 +967,7 @@ function renderTrip(animate){
   document.getElementById("tripTitle").textContent = trip.title;
   document.getElementById("tripSub").textContent = trip.subtitle;
   document.getElementById("tripDates").textContent = trip.dates;
-  cdMode = null; tick();
+  cdStart = new Date(trip.start).getTime(); cdEnd = new Date(trip.end).getTime(); cdNums = null; cdMode = null; tick();
 
   document.getElementById("flights").innerHTML = trip.flights.length ? trip.flights.map(f=>`
     <article class="card pass">
@@ -1029,15 +1043,44 @@ document.getElementById("foot").innerHTML = `<svg viewBox="0 0 150 60" aria-hidd
 
 /* ---------- 選單目前位置 ---------- */
 const links = [...document.querySelectorAll(".nav a.link")];
+const navIn = document.querySelector(".nav-in");
+function syncNavLink(id){
+  links.forEach(a=>a.classList.toggle("on", a.getAttribute("href") === "#"+id));
+  const on = links.find(a=>a.classList.contains("on"));
+  if (!on || !navIn) return;
+  const nr = navIn.getBoundingClientRect(), r = on.getBoundingClientRect();
+  if (r.left >= nr.left + 8 && r.right <= nr.right - 8) return;
+  navIn.scrollLeft += (r.left + r.right)/2 - (nr.left + nr.right)/2;
+}
 const io = new IntersectionObserver(entries=>{
-  entries.forEach(en=>{
-    if (!en.isIntersecting) return;
-    links.forEach(a=>a.classList.toggle("on", a.getAttribute("href") === "#"+en.target.id));
-    const on = links.find(a=>a.classList.contains("on"));
-    if (on) on.scrollIntoView({block:"nearest", inline:"nearest"});
-  });
+  const vis = entries.filter(en=>en.isIntersecting);
+  if (!vis.length) return;
+  vis.sort((a,b)=>b.intersectionRatio - a.intersectionRatio);
+  syncNavLink(vis[0].target.id);
 }, { rootMargin:"-35% 0px -60% 0px" });
 document.querySelectorAll("main section[id]").forEach(s=>io.observe(s));
+
+/* 點選單才用平滑捲動；不要設在 html 上，以免觀察器或 scrollIntoView 跟手指搶 */
+document.querySelector(".nav").addEventListener("click", e=>{
+  const a = e.target.closest("a[href^='#']");
+  if (!a) return;
+  const el = document.getElementById(a.getAttribute("href").slice(1));
+  if (!el) return;
+  e.preventDefault();
+  const pad = (document.querySelector("header.nav")?.getBoundingClientRect().bottom || 0) + 14;
+  const y = el.getBoundingClientRect().top + window.scrollY - pad;
+  window.scrollTo({ top: Math.max(0, y), behavior: reduceMotion.matches ? "auto" : "smooth" });
+}, { passive: false });
+
+/* 滑動時暫停裝飾動畫，停下來再繼續 */
+let scrollIdle = 0;
+const markScrolling = ()=>{
+  document.documentElement.classList.add("is-scrolling");
+  clearTimeout(scrollIdle);
+  scrollIdle = setTimeout(()=>document.documentElement.classList.remove("is-scrolling"), 150);
+};
+window.addEventListener("scroll", markScrolling, { passive: true });
+window.addEventListener("touchmove", markScrolling, { passive: true });
 </script>
 </body>
 </html>
