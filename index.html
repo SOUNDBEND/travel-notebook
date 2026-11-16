@@ -291,14 +291,13 @@ const TRIPS = [
   days: [
     { date:"12/16", week:"週三", title:"出發與入住", area:"酷航・東橫大手町", art:"plane", items:[
       { t:"14:00", title:"酷航桃園機場T1", note:"14:00–18:00（台北時間）。行事曆未寫航班代號與抵達機場。", move:["plane"] },
-      { t:"住宿", title:"入住 東橫大手町", note:"全日活動，退房日 12月18日" }
+      { t:"住宿", title:"入住 東橫大手町", note:"全日活動，12/16~12/17。" }
     ]},
-    { date:"12/17", week:"週四", title:"入住 Toemu Nozawa", area:"東橫大手町・長野", art:"", items:[
-      { t:"住宿", title:"東橫大手町", note:"續住，退房日 12月18日。與 Toemu Nozawa 12/17~12/21 重疊一晚。" },
+    { date:"12/17", week:"週四", title:"東橫大手町退房、入住 Toemu Nozawa", area:"東京・長野", art:"", items:[
+      { t:"退房", title:"東橫大手町 退房", note:"12/16~12/17。" },
       { t:"15:00", title:"入住 Toemu Nozawa", note:"已確認。12/17~12/21，退房 12/21 10:00。長野。2 間房，皆為 1 x Triple Room with Shared Bathroom（3 位大人、2 位大人）。" }
     ]},
-    { date:"12/18", week:"週五", title:"東橫大手町退房", area:"長野 Toemu Nozawa", art:"", items:[
-      { t:"退房", title:"東橫大手町 退房", note:"全日活動的退房日為 12月18日。" },
+    { date:"12/18", week:"週五", title:"Toemu Nozawa", area:"長野", art:"", items:[
       { t:"住宿", title:"Toemu Nozawa", note:"續住，12/17~12/21，退房 12/21 10:00。" }
     ]},
     { date:"12/19", week:"週六", title:"Toemu Nozawa", area:"長野", art:"", items:[
@@ -309,31 +308,29 @@ const TRIPS = [
     ]},
     { date:"12/21", week:"週一", title:"Toemu Nozawa 退房、入住 Belken Hotel Kanda", area:"長野・Belken Hotel Kanda", art:"", items:[
       { t:"10:00", title:"Toemu Nozawa 退房", note:"12/17~12/21，退房 10:00。" },
-      { t:"住宿", title:"入住 Belken Hotel Kanda", note:"全日活動，退房日 12月24日" }
+      { t:"住宿", title:"入住 Belken Hotel Kanda", note:"全日活動，12/21~12/23。" }
     ]},
     { date:"12/22", week:"週二", title:"Belken Hotel Kanda", area:"Belken Hotel Kanda", art:"", items:[
-      { t:"住宿", title:"Belken Hotel Kanda", note:"續住，退房日 12月24日" }
+      { t:"住宿", title:"Belken Hotel Kanda", note:"續住，12/21~12/23。" }
     ]},
-    { date:"12/23", week:"週三", title:"回程", area:"Belken Hotel Kanda・酷航", art:"plane", items:[
-      { t:"住宿", title:"Belken Hotel Kanda", note:"續住，退房日 12月24日" },
+    { date:"12/23", week:"週三", title:"Belken Hotel Kanda 退房、回程", area:"Belken Hotel Kanda・酷航", art:"plane", items:[
+      { t:"退房", title:"Belken Hotel Kanda 退房", note:"12/21~12/23。" },
       { t:"18:55", title:"酷航成田（T1)", note:"18:55–22:10（台北時間）。行事曆未寫航班代號與抵達地。", move:["plane"] }
     ]}
   ],
   stays: [
-    { name:"東橫大手町", city:"東京", nights:"12/16 – 12/18・2 晚", color:"#F2A497",
-      checkin:"12月16日（全日）", checkout:"12月18日（全日活動結束日）", addr:"行事曆未寫", access:"行事曆未寫",
+    { name:"東橫大手町", city:"東京", nights:"12/16~12/17・1 晚", color:"#F2A497",
+      checkin:"12/16（全日）", checkout:"12/17（全日）", addr:"行事曆未寫", access:"行事曆未寫",
       memo:"行事曆標題為「住宿：東橫大手町」", map:"東橫大手町" },
     { name:"Toemu Nozawa", city:"長野", nights:"12/17~12/21・4 晚", color:"#B9DAA5",
       checkin:"12/17 15:00", checkout:"12/21 10:00", addr:"長野", access:"截圖未寫",
       memo:"已確認。2 間房，皆為 1 x Triple Room with Shared Bathroom（3 位大人、2 位大人）。資料來自訂房截圖。", map:"Toemu Nozawa 長野" },
-    { name:"Belken Hotel Kanda", city:"東京", nights:"12/21 – 12/24・3 晚", color:"#A8D3E6",
-      checkin:"12月21日（全日）", checkout:"12月24日（全日活動結束日）", addr:"行事曆未寫", access:"行事曆未寫",
-      memo:"12月23日晚間已有酷航回程", map:"Belken Hotel Kanda" }
+    { name:"Belken Hotel Kanda", city:"東京", nights:"12/21~12/23・2 晚", color:"#A8D3E6",
+      checkin:"12/21（全日）", checkout:"12/23（全日）", addr:"行事曆未寫", access:"行事曆未寫",
+      memo:"行事曆標題為「住宿：Belken Hotel Kanda」。12/23 晚間有酷航回程。", map:"Belken Hotel Kanda" }
   ],
   lists: {
     todo: [
-      { text:"待確認：東橫大手町 12/16–12/18 與 Toemu Nozawa 12/17~12/21 重疊一晚", note:"待確認" },
-      { text:"Belken Hotel Kanda 退房日為 12月24日，但 12月23日 18:55 已有酷航回程", note:"行事曆未填" },
       { text:"酷航去程未寫航班代號與抵達機場", note:"行事曆未填" },
       { text:"酷航回程未寫航班代號與抵達地", note:"行事曆未填" }
     ],
@@ -468,54 +465,52 @@ const TRIPS = [
   ],
   days: [
     { date:"2/20", week:"週六", title:"入住 Dormy inn 小樽", area:"小樽", art:"fuji", items:[
-      { t:"住宿", title:"入住 Dormy inn 小樽", note:"天然溫泉 燈之湯 多美迎PREMIUM小樽。退房日 2月25日。" }
+      { t:"住宿", title:"入住 Dormy inn 小樽", note:"天然溫泉 燈之湯 多美迎PREMIUM小樽。2/20~2/24。" }
     ]},
     { date:"2/21", week:"週日", title:"Dormy inn 小樽", area:"小樽", art:"snowman", items:[
-      { t:"住宿", title:"Dormy inn 小樽", note:"續住，退房日 2月25日" }
+      { t:"住宿", title:"Dormy inn 小樽", note:"續住，2/20~2/24。" }
     ]},
     { date:"2/22", week:"週一", title:"Dormy inn 小樽", area:"小樽", art:"fuji", items:[
-      { t:"住宿", title:"Dormy inn 小樽", note:"續住，退房日 2月25日" }
+      { t:"住宿", title:"Dormy inn 小樽", note:"續住，2/20~2/24。" }
     ]},
     { date:"2/23", week:"週二", title:"Dormy inn 小樽", area:"小樽", art:"snowman", items:[
-      { t:"住宿", title:"Dormy inn 小樽", note:"續住，退房日 2月25日" }
+      { t:"住宿", title:"Dormy inn 小樽", note:"續住，2/20~2/24。" }
     ]},
-    { date:"2/24", week:"週三", title:"兩筆住宿重疊", area:"小樽", art:"fuji", items:[
-      { t:"住宿", title:"Dormy inn 小樽", note:"續住，退房日 2月25日" },
-      { t:"住宿", title:"入住 omo5 小樽", note:"OMO5 小樽 by 星野集團。退房日 3月1日。" }
+    { date:"2/24", week:"週三", title:"Dormy inn 退房、入住 omo5 小樽", area:"小樽", art:"fuji", items:[
+      { t:"退房", title:"Dormy inn 小樽 退房", note:"2/20~2/24。" },
+      { t:"住宿", title:"入住 omo5 小樽", note:"OMO5 小樽 by 星野集團。2/24~2/28。" }
     ]},
-    { date:"2/25", week:"週四", title:"Dormy inn 退房、omo5 續住", area:"小樽", art:"", items:[
-      { t:"退房", title:"Dormy inn 小樽 退房", note:"全日活動的退房日為 2月25日" },
-      { t:"住宿", title:"omo5 小樽", note:"續住，退房日 3月1日" }
+    { date:"2/25", week:"週四", title:"omo5 小樽", area:"小樽", art:"", items:[
+      { t:"住宿", title:"omo5 小樽", note:"續住，2/24~2/28。" }
     ]},
     { date:"2/26", week:"週五", title:"omo5 小樽", area:"小樽", art:"", items:[
-      { t:"住宿", title:"omo5 小樽", note:"續住，退房日 3月1日" }
+      { t:"住宿", title:"omo5 小樽", note:"續住，2/24~2/28。" }
     ]},
     { date:"2/27", week:"週六", title:"omo5 小樽", area:"小樽", art:"", items:[
-      { t:"住宿", title:"omo5 小樽", note:"續住，退房日 3月1日" }
+      { t:"住宿", title:"omo5 小樽", note:"續住，2/24~2/28。" }
     ]},
-    { date:"2/28", week:"週日", title:"星宇札幌回台中", area:"札幌 → 台中・omo5 小樽", art:"plane", items:[
-      { t:"10:00", title:"星宇札幌回台中", note:"10:00–11:00（台北時間）。行事曆未寫航班代號。", move:["plane"] },
-      { t:"住宿", title:"omo5 小樽", note:"續住，退房日 3月1日" }
+    { date:"2/28", week:"週日", title:"omo5 小樽退房、星宇札幌回台中", area:"小樽・札幌 → 台中", art:"plane", items:[
+      { t:"退房", title:"omo5 小樽 退房", note:"2/24~2/28。" },
+      { t:"10:00", title:"星宇札幌回台中", note:"10:00–11:00（台北時間）。行事曆未寫航班代號。", move:["plane"] }
     ]},
-    { date:"3/01", week:"週一", title:"omo5 小樽退房", area:"小樽", art:"", items:[
-      { t:"退房", title:"omo5 小樽 退房", note:"全日活動的退房日為 3月1日。主日曆「阿馬的北海道」區塊也在這天結束。" }
+    { date:"3/01", week:"週一", title:"阿馬的北海道結束", area:"", art:"", items:[
+      { t:"全日", title:"阿馬的北海道", note:"主日曆全日區塊在這天結束。" }
     ]}
   ],
   stays: [
-    { name:"Dormy inn 小樽", city:"小樽", nights:"2/20 – 2/25・5 晚", color:"#F2A497",
-      checkin:"2月20日（全日）", checkout:"2月25日（全日活動結束日）",
+    { name:"Dormy inn 小樽", city:"小樽", nights:"2/20~2/24・4 晚", color:"#F2A497",
+      checkin:"2/20（全日）", checkout:"2/24（全日）",
       addr:"天然溫泉 燈之湯 多美迎PREMIUM小樽, 3-chōme-9-1 Inaho, Otaru, Hokkaido 047-0032日本",
       access:"行事曆未寫", memo:"行事曆標題為「宿：Dormy inn 小樽」",
       map:"天然溫泉 燈之湯 多美迎PREMIUM小樽, 3-chōme-9-1 Inaho, Otaru, Hokkaido 047-0032日本" },
-    { name:"omo5 小樽", city:"小樽", nights:"2/24 – 3/01・5 晚", color:"#A8D3E6",
-      checkin:"2月24日（全日）", checkout:"3月1日（全日活動結束日）",
+    { name:"omo5 小樽", city:"小樽", nights:"2/24~2/28・4 晚", color:"#A8D3E6",
+      checkin:"2/24（全日）", checkout:"2/28（全日）",
       addr:"OMO5 小樽 by 星野集團, 1-chōme-6-31 Ironai, Otaru, Hokkaido 047-0031日本",
-      access:"行事曆未寫", memo:"與 Dormy inn 在 2月24日重疊一晚",
+      access:"行事曆未寫", memo:"行事曆標題為「宿：omo5 小樽」",
       map:"OMO5 小樽 by 星野集團, 1-chōme-6-31 Ironai, Otaru, Hokkaido 047-0031日本" }
   ],
   lists: {
     todo: [
-      { text:"Dormy inn 小樽退房 2月25日，omo5 小樽入住 2月24日，兩筆重疊一晚", note:"行事曆未填" },
       { text:"這趟行事曆沒有去程航班", note:"行事曆未填" },
       { text:"星宇札幌回台中 未寫航班代號，紀錄時段為 10:00–11:00", note:"行事曆未填" }
     ],
