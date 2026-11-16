@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>彎彎腰の旅手帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Huninn&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FFFCF6;
+  --ink:#3E3A39;
+  --coral:#F2A497;
+  --yellow:#F6D27A;
+  --water:#A8D3E6;
+  --green:#B9DAA5;
+  --line:3px;
+  --radius:28px;
+  --radius-sm:18px;
+  --pad:18px;
+  --header-h:122px;
+  --shadow:none;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:"Huninn",sans-serif;font-weight:400;line-height:1.55}
+body{min-height:100dvh}
+.grain{pointer-events:none;position:fixed;inset:0;z-index:0;opacity:.4;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ccircle cx='8' cy='14' r='1' fill='%233E3A39' opacity='.12'/%3E%3Ccircle cx='52' cy='6' r='1' fill='%233E3A39' opacity='.1'/%3E%3Ccircle cx='28' cy='48' r='1' fill='%233E3A39' opacity='.1'/%3E%3Ccircle cx='70' cy='36' r='1' fill='%233E3A39' opacity='.12'/%3E%3Ccircle cx='16' cy='70' r='1' fill='%233E3A39' opacity='.08'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1;max-width:460px;margin:0 auto;padding:0 16px calc(28px + env(safe-area-inset-bottom))}
+
+header.top{
+  position:sticky;top:0;z-index:20;
+  background:var(--paper);
+  padding:10px 0 8px;
+  border-bottom:var(--line) solid var(--ink);
+}
+.brand{display:flex;align-items:baseline;justify-content:space-between;padding:0 2px 8px}
+.brand h1{font-size:18px;margin:0;letter-spacing:.04em}
+.brand span{font-size:12px;opacity:.7}
+.trips{display:flex;flex-wrap:wrap;gap:8px;padding:2px 2px 10px}
+.trip-btn{
+  flex:0 0 auto;border:var(--line) solid var(--ink);border-radius:999px;
+  background:var(--paper);color:var(--ink);font-family:inherit;font-size:13px;
+  padding:5px 11px;cursor:pointer;line-height:1.2;white-space:nowrap
+}
+.trip-btn.on{background:var(--coral)}
+nav.menu{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:0 2px}
+nav.menu::-webkit-scrollbar{display:none}
+nav.menu button{
+  flex:1 0 auto;border:var(--line) solid var(--ink);border-radius:14px;
+  background:var(--paper);color:var(--ink);font-family:inherit;font-size:13px;
+  padding:7px 10px;cursor:pointer
+}
+nav.menu button.on{background:var(--yellow)}
+
+section{display:none;padding-top:18px;min-height:62vh}
+section.show{display:block}
+.hero{text-align:center;padding:6px 0 8px}
+.illu{width:100%;max-width:360px;height:220px;margin:0 auto;display:block}
+.illu svg{width:100%;height:100%;overflow:visible}
+h2.ttl{font-size:34px;margin:8px 0 0;letter-spacing:.08em}
+.sub{margin:4px 0 14px;font-size:15px}
+
+.card{
+  border:var(--line) solid var(--ink);
+  border-radius:var(--radius);
+  background:var(--paper);
+  padding:16px 18px;
+  margin:0 0 14px;
+}
+.card.coral{background:var(--coral)}
+.card.yellow{background:var(--yellow)}
+.card.water{background:var(--water)}
+.card.green{background:var(--green)}
+.kicker{font-size:12px;letter-spacing:.16em;margin:0 0 4px}
+.big{font-size:48px;line-height:1.05;margin:0}
+.big em{font-style:normal;font-size:18px;margin-left:4px}
+.note{font-size:13px;margin:8px 0 0}
+.muted{opacity:.75;font-size:13px}
+
+.tag{
+  display:inline-block;border:2px solid var(--ink);border-radius:999px;
+  padding:1px 8px;font-size:11px;line-height:1.5;margin:0 6px 0 0;vertical-align:middle
+}
+.tag.fly{background:var(--water)}
+.tag.stay{background:var(--green)}
+.tag.act{background:var(--coral)}
+.tag.warn{background:var(--yellow)}
+.tag.must{background:var(--coral);font-weight:400}
+
+.days-bar{display:flex;gap:8px;overflow-x:auto;padding:2px 20px 14px 2px;scrollbar-width:none}
+.days-bar::-webkit-scrollbar{display:none}
+.day-btn{
+  flex:0 0 auto;width:58px;border:var(--line) solid var(--ink);border-radius:20px;
+  background:var(--paper);color:var(--ink);font-family:inherit;cursor:pointer;
+  padding:8px 0 7px;text-align:center;line-height:1.2
+}
+.day-btn .md{font-size:15px;display:block}
+.day-btn .wk{font-size:11px;opacity:.75}
+.day-btn.on{background:var(--yellow)}
+.timeline{position:relative;padding:4px 0 8px 0}
+.tl-item{display:grid;grid-template-columns:64px 22px 1fr;gap:0 8px;margin:0 0 12px}
+.tl-time{font-size:13px;padding-top:12px;text-align:right}
+.tl-dot{position:relative}
+.tl-dot::before{
+  content:"";position:absolute;left:7px;top:0;bottom:-12px;width:3px;background:var(--ink)
+}
+.tl-item:last-child .tl-dot::before{bottom:auto;height:24px}
+.tl-dot::after{
+  content:"";position:absolute;left:2px;top:16px;width:13px;height:13px;border-radius:50%;
+  border:3px solid var(--ink);background:var(--yellow);z-index:1
+}
+.tl-item.fly .tl-dot::after{background:var(--water)}
+.tl-item.stay .tl-dot::after{background:var(--green)}
+.tl-item.act .tl-dot::after{background:var(--coral)}
+.tl-item.gap .tl-dot::after{background:var(--paper)}
+.tl-body{
+  border:var(--line) solid var(--ink);border-radius:var(--radius-sm);
+  padding:10px 12px;background:var(--paper)
+}
+.tl-item.fly .tl-body{background:var(--water)}
+.tl-item.stay .tl-body{background:var(--green)}
+.tl-item.act .tl-body{background:#F8EFE3}
+.tl-item.gap .tl-body{background:var(--paper)}
+.tl-body h3{margin:4px 0 0;font-size:16px;font-weight:400}
+.tl-body p{margin:4px 0 0;font-size:13px}
+.empty{text-align:center;padding:28px 12px;border:var(--line) solid var(--ink);border-radius:var(--radius);background:var(--yellow)}
+
+.list{list-style:none;margin:0;padding:0}
+.list li{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:2px solid var(--ink)}
+.list li:last-child{border-bottom:0}
+.list input{accent-color:var(--ink);width:20px;height:20px;margin-top:3px;flex:0 0 auto}
+.list label{flex:1;font-size:15px}
+.list li.done label{text-decoration:line-through;opacity:.5}
+.add-row{display:flex;gap:8px;margin-top:10px}
+.add-row input[type=text]{
+  flex:1;border:var(--line) solid var(--ink);border-radius:14px;background:var(--paper);
+  font-family:inherit;font-size:14px;padding:8px 12px;color:var(--ink)
+}
+.add-row button{
+  border:var(--line) solid var(--ink);border-radius:14px;background:var(--green);
+  font-family:inherit;font-size:14px;padding:8px 12px;cursor:pointer;color:var(--ink)
+}
+.sec-title{font-size:20px;margin:6px 0 12px;letter-spacing:.06em}
+
+.source{font-size:12px;opacity:.7;margin:18px 0 8px;text-align:center;line-height:1.6}
+
+.illu .bob{transform-origin:center;animation:bob 3.6s ease-in-out infinite}
+.illu .bob2{animation:bob 4.4s ease-in-out infinite .4s}
+.illu .sway{transform-box:fill-box;transform-origin:center bottom;animation:sway 3.2s ease-in-out infinite}
+.illu .chug{animation:chug 3s ease-in-out infinite}
+.illu .flake{animation:flake 4.8s linear infinite}
+.bounce{animation:pop .42s cubic-bezier(.2,1.4,.4,1)}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes sway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(3deg)}}
+@keyframes chug{0%,100%{transform:translateX(0)}50%{transform:translateX(10px)}}
+@keyframes flake{0%{transform:translateY(-6px);opacity:.2}20%{opacity:.9}100%{transform:translateY(46px);opacity:0}}
+@keyframes pop{0%{transform:translateY(10px) scale(.96);opacity:.4}100%{transform:translateY(0) scale(1);opacity:1}}
+@media (prefers-reduced-motion:reduce){
+  .illu .bob,.illu .bob2,.illu .sway,.illu .chug,.illu .flake,.bounce{animation:none!important}
+}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><h1>彎彎腰の旅手帳</h1><span>行事曆原樣入冊</span></div>
+    <div class="trips" id="tripBar" role="tablist" aria-label="行程切換"></div>
+    <nav class="menu" id="menu" aria-label="頁面選單">
+      <button data-sec="home" class="on">首頁</button>
+      <button data-sec="flights">航班</button>
+      <button data-sec="days">每日行程</button>
+      <button data-sec="hotels">住宿</button>
+      <button data-sec="lists">清單</button>
+    </nav>
+  </div>
+</header>
+<div class="wrap">
+  <section id="sec-home" class="show"></section>
+  <section id="sec-flights"></section>
+  <section id="sec-days"></section>
+  <section id="sec-hotels"></section>
+  <section id="sec-lists"></section>
+  <p class="source">資料來源：Google 行事曆帳號 pspdan092@gmail.com<br>主日曆與「ETING 的飲食紀錄」（etingau@gmail.com 建立的行程）唯讀整理。<br>只顯示行事曆既有內容，沒有補寫景點或航班。時間依紀錄為台北時間（Asia/Taipei）。</p>
+</div>
+<script>
+const WEEK=["日","一","二","三","四","五","六"];
+const TZ="Asia/Taipei";
+
+function ymd(d){const z=new Date(d+"T12:00:00+08:00");return d}
+function fmtMD(iso){const [y,m,d]=iso.split("-");return Number(m)+"月"+Number(d)+"日"}
+function fmtFull(iso){const dt=new Date(iso+"T12:00:00+08:00");return fmtMD(iso)+"（"+WEEK[dt.getDay()]+"）"}
+function daysBetween(fromIso,toIso){
+  const a=new Date(fromIso+"T00:00:00+08:00");
+  const b=new Date(toIso+"T00:00:00+08:00");
+  return Math.round((b-a)/86400000);
+}
+function todayIso(){
+  return new Date().toLocaleDateString("en-CA",{timeZone:TZ});
+}
+function rangeDays(start,end){
+  const out=[];let cur=start;
+  while(cur<=end){out.push(cur);const dt=new Date(cur+"T12:00:00+08:00");dt.setDate(dt.getDate()+1);
+    cur=dt.toLocaleDateString("en-CA",{timeZone:TZ})}
+  return out;
+}
+function hhmm(t){return t?t.slice(0,5):""}
+
+const ILLU={
+tokyo:`<svg viewBox="0 0 360 220" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <rect x="18" y="16" width="324" height="188" rx="36" fill="#A8D3E6" stroke="#3E3A39" stroke-width="3"/>
+  <circle class="bob2" cx="78" cy="58" r="22" fill="#F6D27A" stroke="#3E3A39" stroke-width="3"/>
+  <path d="M18 150h324" stroke="#3E3A39" stroke-width="3"/>
+  <rect x="18" y="150" width="324" height="54" rx="0" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3"/>
+  <g class="sway">
+    <path d="M180 46l14 18h-28z" fill="#3E3A39"/>
+    <rect x="174" y="62" width="12" height="14" fill="#F2A497" stroke="#3E3A39" stroke-width="3"/>
+    <path d="M132 186L180 76l48 110z" fill="#F2A497" stroke="#3E3A39" stroke-width="3"/>
+    <rect x="168" y="118" width="24" height="10" fill="#F6D27A" stroke="#3E3A39" stroke-width="2.5"/>
+    <rect x="172" y="142" width="16" height="10" fill="#F6D27A" stroke="#3E3A39" stroke-width="2.5"/>
+    <rect x="176" y="96" width="8" height="8" fill="#3E3A39"/>
+  </g>
+  <g class="chug">
+    <rect x="40" y="158" width="86" height="34" rx="8" fill="#FFFCF6" stroke="#3E3A39" stroke-width="3"/>
+    <rect x="126" y="158" width="70" height="34" rx="8" fill="#F6D27A" stroke="#3E3A39" stroke-width="3"/>
+    <circle cx="62" cy="196" r="8" fill="#3E3A39"/><circle cx="108" cy="196" r="8" fill="#3E3A39"/>
+    <circle cx="146" cy="196" r="8" fill="#3E3A39"/><circle cx="180" cy="196" r="8" fill="#3E3A39"/>
+    <rect x="50" y="166" width="18" height="12" rx="3" fill="#A8D3E6" stroke="#3E3A39" stroke-width="2"/>
+    <rect x="74" y="166" width="18" height="12" rx="3" fill="#A8D3E6" stroke="#3E3A39" stroke-width="2"/>
+  </g>
+  <circle cx="292" cy="78" r="10" fill="#FFFCF6" stroke="#3E3A39" stroke-width="3"/>
+  <circle cx="318" cy="58" r="7" fill="#FFFCF6" stroke="#3E3A39" stroke-width="3"/>
+</svg>`,
+ski:`<svg viewBox="0 0 360 220" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <rect x="18" y="16" width="324" height="188" rx="36" fill="#A8D3E6" stroke="#3E3A39" stroke-width="3"/>
+  <circle class="bob2" cx="80" cy="54" r="20" fill="#F6D27A" stroke="#3E3A39" stroke-width="3"/>
+  <g class="bob">
+    <path d="M40 186L130 70l70 70 20-28 90 74H40z" fill="#FFFCF6" stroke="#3E3A39" stroke-width="3"/>
+    <path d="M130 70l18 28-30 8z" fill="#FFFCF6" stroke="#3E3A39" stroke-width="3"/>
+  </g>
+  <g class="sway">
+    <circle cx="236" cy="118" r="10" fill="#F2A497" stroke="#3E3A39" stroke-width="3"/>
+    <path d="M236 128v22" stroke="#3E3A39" stroke-width="3" stroke-linecap="round"/>
+    <path d="M224 142h24" stroke="#3E3A39" stroke-width="3" stroke-linecap="round"/>
+    <path d="M214 162l44 6M218 170l40-8" stroke="#3E3A39" stroke-width="3" stroke-linecap="round"/>
+    <path d="M228 136l-14 10M244 136l14 8" stroke="#3E3A39" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <circle class="flake" cx="60" cy="90" r="3" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2"/>
+  <circle class="flake" cx="300" cy="70" r="3" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2" style="animation-delay:.8s"/>
+  <circle class="flake" cx="320" cy="110" r="2.5" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2" style="animation-delay:1.6s"/>
+  <circle class="flake" cx="100" cy="50" r="2.5" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2" style="animation-delay:2.2s"/>
+</svg>`,
+tokyoski:`<svg viewBox="0 0 360 220" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <rect x="18" y="16" width="324" height="188" rx="36" fill="#A8D3E6" stroke="#3E3A39" stroke-width="3"/>
+  <circle class="bob2" cx="300" cy="52" r="18" fill="#F6D27A" stroke="#3E3A39" stroke-width="3"/>
+  <g class="bob">
+    <path d="M28 186L120 78l50 58 30-40 122 90H28z" fill="#FFFCF6" stroke="#3E3A39" stroke-width="3"/>
+  </g>
+  <g class="sway">
+    <path d="M86 70l8 10h-16z" fill="#3E3A39"/>
+    <path d="M62 186L86 86l24 100z" fill="#F2A497" stroke="#3E3A39" stroke-width="3"/>
+    <rect x="80" y="120" width="12" height="7" fill="#F6D27A" stroke="#3E3A39" stroke-width="2"/>
+  </g>
+  <g class="sway" style="animation-delay:.5s">
+    <circle cx="230" cy="124" r="9" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3"/>
+    <path d="M230 133v18M218 164l28 4M222 170l24-6M220 144h20" stroke="#3E3A39" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <circle class="flake" cx="160" cy="60" r="3" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2"/>
+  <circle class="flake" cx="270" cy="80" r="2.5" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2" style="animation-delay:1s"/>
+</svg>`,
+otaru:`<svg viewBox="0 0 360 220" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <rect x="18" y="16" width="324" height="188" rx="36" fill="#A8D3E6" stroke="#3E3A39" stroke-width="3"/>
+  <circle class="bob2" cx="64" cy="50" r="16" fill="#F6D27A" stroke="#3E3A39" stroke-width="3"/>
+  <path d="M18 150h324" stroke="#3E3A39" stroke-width="3"/>
+  <rect x="18" y="150" width="324" height="54" fill="#7FB7CE" stroke="#3E3A39" stroke-width="3"/>
+  <path d="M40 168h280M50 180h260" stroke="#FFFCF6" stroke-width="2" opacity=".8"/>
+  <g class="bob">
+    <rect x="48" y="86" width="70" height="64" fill="#F2A497" stroke="#3E3A39" stroke-width="3"/>
+    <rect x="56" y="96" width="16" height="16" fill="#F6D27A" stroke="#3E3A39" stroke-width="2"/>
+    <rect x="80" y="96" width="16" height="16" fill="#F6D27A" stroke="#3E3A39" stroke-width="2"/>
+    <rect x="68" y="120" width="16" height="20" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2"/>
+    <rect x="126" y="74" width="86" height="76" fill="#FFFCF6" stroke="#3E3A39" stroke-width="3"/>
+    <rect x="138" y="86" width="18" height="16" fill="#A8D3E6" stroke="#3E3A39" stroke-width="2"/>
+    <rect x="164" y="86" width="18" height="16" fill="#A8D3E6" stroke="#3E3A39" stroke-width="2"/>
+    <rect x="138" y="110" width="18" height="16" fill="#A8D3E6" stroke="#3E3A39" stroke-width="2"/>
+    <rect x="164" y="110" width="18" height="16" fill="#A8D3E6" stroke="#3E3A39" stroke-width="2"/>
+    <path d="M126 74h86l-8-16h-70z" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3"/>
+    <rect x="226" y="92" width="70" height="58" fill="#F6D27A" stroke="#3E3A39" stroke-width="3"/>
+    <rect x="238" y="104" width="16" height="14" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2"/>
+    <rect x="264" y="104" width="16" height="14" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2"/>
+  </g>
+  <path d="M170 150c8 8 20 8 28 0" stroke="#3E3A39" stroke-width="3" fill="none"/>
+  <circle class="flake" cx="100" cy="48" r="3" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2"/>
+  <circle class="flake" cx="300" cy="60" r="3" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2" style="animation-delay:1.2s"/>
+  <circle class="flake" cx="250" cy="40" r="2.5" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2" style="animation-delay:2s"/>
+</svg>`,
+osaka:`<svg viewBox="0 0 360 220" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <rect x="18" y="16" width="324" height="188" rx="36" fill="#A8D3E6" stroke="#3E3A39" stroke-width="3"/>
+  <circle class="bob2" cx="70" cy="56" r="20" fill="#F6D27A" stroke="#3E3A39" stroke-width="3"/>
+  <ellipse cx="180" cy="186" rx="130" ry="16" fill="#7FB7CE" stroke="#3E3A39" stroke-width="3"/>
+  <g class="bob">
+    <rect x="92" y="150" width="176" height="28" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3"/>
+    <rect x="108" y="126" width="144" height="28" fill="#F2A497" stroke="#3E3A39" stroke-width="3"/>
+    <path d="M108 126h144l-16-22H124z" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3"/>
+    <rect x="128" y="86" width="104" height="22" fill="#F2A497" stroke="#3E3A39" stroke-width="3"/>
+    <path d="M128 86h104l-18-20H146z" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3"/>
+    <rect x="150" y="50" width="60" height="20" fill="#F6D27A" stroke="#3E3A39" stroke-width="3"/>
+    <path d="M150 50h60l-12-16H162z" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3"/>
+    <rect x="174" y="28" width="12" height="10" fill="#3E3A39"/>
+    <rect x="140" y="134" width="16" height="12" fill="#F6D27A" stroke="#3E3A39" stroke-width="2"/>
+    <rect x="204" y="134" width="16" height="12" fill="#F6D27A" stroke="#3E3A39" stroke-width="2"/>
+    <rect x="172" y="132" width="16" height="18" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2"/>
+  </g>
+  <rect x="40" y="158" width="28" height="22" rx="4" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3"/>
+  <rect x="292" y="152" width="24" height="28" rx="4" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3"/>
+</svg>`
+};
+
+const PRE=[
+  "確認護照效期","下載或截圖機票與住宿","兌換日圓","通知銀行將出國",
+  "確認上網方式","檢查充電器與轉換插頭","準備常用藥"
+];
+const BAG=[
+  "護照與證件","錢包／信用卡／現金","手機與充電器","行動電源",
+  "轉換插頭","換洗衣物","盥洗用品","藥品","耳機"
+];
+const SKI=[
+  "滑雪外套","雪褲","保暖內層","滑雪手套","雪鏡","羊毛襪","暖暖包","護具（若有）"
+];
+
+const TRIPS=[
+{
+  id:"tokyo-dec", short:"東京 12月", title:"東京",
+  period:"2026年12月16日 − 12月23日", start:"2026-12-16", end:"2026-12-23",
+  illu:"tokyo", ski:false,
+  blurb:"酷航去回、東橫大手町與 Belken Hotel Kanda。12月18日至20日行事曆沒有住宿或行程。",
+  flights:[
+    {title:"酷航桃園機場T1", date:"2026-12-16", startt:"14:00", endt:"18:00", note:"行事曆未寫航班代號與抵達機場。"},
+    {title:"酷航成田（T1)", date:"2026-12-23", startt:"18:55", endt:"22:10", note:"行事曆未寫航班代號與抵達地。"}
+  ],
+  hotels:[
+    {title:"住宿：東橫大手町", checkin:"2026-12-16", checkout:"2026-12-18", allDay:true},
+    {title:"住宿：Belken Hotel Kanda", checkin:"2026-12-21", checkout:"2026-12-24", allDay:true}
+  ],
+  events:{
+    "2026-12-16":[
+      {type:"fly", time:"14:00", time2:"18:00", title:"酷航桃園機場T1", detail:"14:00–18:00（台北時間）"},
+      {type:"stay", time:"住宿", title:"入住 東橫大手町", detail:"全日活動，退房日 12月18日"}
+    ],
+    "2026-12-17":[
+      {type:"stay", time:"住宿", title:"東橫大手町", detail:"續住，退房日 12月18日"}
+    ],
+    "2026-12-18":[
+      {type:"stay", time:"退房", title:"東橫大手町 退房", detail:"全日活動的退房日為 12月18日"},
+      {type:"gap", time:"—", title:"行事曆尚無其他行程", detail:"這天到 12月20日，行事曆沒有下一筆住宿或活動。"}
+    ],
+    "2026-12-19":[
+      {type:"gap", time:"—", title:"行事曆尚無行程", detail:"未登記住宿或活動。"}
+    ],
+    "2026-12-20":[
+      {type:"gap", time:"—", title:"行事曆尚無行程", detail:"未登記住宿或活動。"}
+    ],
+    "2026-12-21":[
+      {type:"stay", time:"住宿", title:"入住 Belken Hotel Kanda", detail:"全日活動，退房日 12月24日"}
+    ],
+    "2026-12-22":[
+      {type:"stay", time:"住宿", title:"Belken Hotel Kanda", detail:"續住，退房日 12月24日"}
+    ],
+    "2026-12-23":[
+      {type:"stay", time:"住宿", title:"Belken Hotel Kanda", detail:"續住，退房日 12月24日"},
+      {type:"fly", time:"18:55", time2:"22:10", title:"酷航成田（T1)", detail:"18:55–22:10（台北時間）"}
+    ]
+  }
+},
+{
+  id:"hokkaido-ski", short:"北海道滑雪", title:"北海道滑雪",
+  period:"2027年1月22日 − 1月31日", start:"2027-01-22", end:"2027-01-31",
+  illu:"ski", ski:true,
+  blurb:"行事曆有兩筆重疊的「北海道滑雪」：ETING 的飲食紀錄為全日 1/22–1/31（並邀請 pspdan092 已接受），主日曆另有時段事件 1/22 19:00–1/31 20:00。沒有航班、住宿或每日細項。",
+  flights:[],
+  hotels:[],
+  overlapNote:"兩筆事件標題相同、日期重疊，內容都沒有更細的地點或說明。",
+  events:Object.fromEntries(rangeDays("2027-01-22","2027-01-31").map(d=>{
+    const ev=[{type:"act", time:d==="2027-01-22"?"19:00":"全日", title:"北海道滑雪",
+      detail:d==="2027-01-22"?"主日曆時段自 19:00 起；ETING 日曆為全日（至 2月1日退房式結束）。":
+              d==="2027-01-31"?"主日曆時段至 20:00；ETING 日曆全日最後一天。":
+              "ETING 日曆全日；主日曆為跨日時段事件中。"}];
+    return [d,ev];
+  }))
+},
+{
+  id:"tokyo-ski", short:"東京滑雪", title:"東京滑雪",
+  period:"2027年2月8日 − 2月17日", start:"2027-02-08", end:"2027-02-17",
+  illu:"tokyoski", ski:true,
+  blurb:"2月8日 ANA 松山飛羽田，滑雪區塊為 2/9–2/15，2月17日 ANA 羽田飛札幌。沒有住宿紀錄。2月16日行事曆是空的。",
+  flights:[
+    {title:"ANA 松山飛羽田", date:"2027-02-08", startt:"16:50", endt:"20:40", note:"行事曆未寫航班代號。"},
+    {title:"ANA_羽田飛札幌", date:"2027-02-17", startt:"12:00", endt:"13:35", note:"行事曆未寫航班代號。此班在滑雪區塊結束兩天後。"}
+  ],
+  hotels:[],
+  events:{
+    "2027-02-08":[
+      {type:"fly", time:"16:50", time2:"20:40", title:"ANA 松山飛羽田", detail:"16:50–20:40（台北時間）"}
+    ],
+    "2027-02-09":[
+      {type:"act", time:"19:00", title:"東京滑雪", detail:"主日曆時段自 19:00 起；ETING 日曆為全日（2/9–2/15）。"}
+    ],
+    "2027-02-10":[{type:"act", time:"全日", title:"東京滑雪", detail:"ETING 日曆全日；主日曆為跨日時段事件中。"}],
+    "2027-02-11":[{type:"act", time:"全日", title:"東京滑雪", detail:"ETING 日曆全日；主日曆為跨日時段事件中。"}],
+    "2027-02-12":[{type:"act", time:"全日", title:"東京滑雪", detail:"ETING 日曆全日；主日曆為跨日時段事件中。"}],
+    "2027-02-13":[{type:"act", time:"全日", title:"東京滑雪", detail:"ETING 日曆全日；主日曆為跨日時段事件中。"}],
+    "2027-02-14":[{type:"act", time:"全日", title:"東京滑雪", detail:"ETING 日曆全日；主日曆為跨日時段事件中。"}],
+    "2027-02-15":[{type:"act", time:"至20:00", title:"東京滑雪", detail:"主日曆時段至 20:00；ETING 日曆全日最後一天（至 2月16日退房式結束）。"}],
+    "2027-02-16":[{type:"gap", time:"—", title:"行事曆尚無行程", detail:"滑雪區塊已結束，下一筆是 2月17日航班。"}],
+    "2027-02-17":[{type:"fly", time:"12:00", time2:"13:35", title:"ANA_羽田飛札幌", detail:"12:00–13:35（台北時間）"}]
+  }
+},
+{
+  id:"ama-hokkaido", short:"阿馬的北海道", title:"阿馬的北海道",
+  period:"2027年2月20日 − 3月1日", start:"2027-02-20", end:"2027-03-01",
+  illu:"otaru", ski:false,
+  blurb:"主日曆全日區塊 2/20–3/1。住宿在小樽：Dormy inn（入住 2/20、退房 2/25）與 omo5（入住 2/24、退房 3/1），2月24日兩筆重疊。回程「星宇札幌回台中」在 2/28 10:00–11:00，行事曆未寫航班代號，時段只有一小時。沒有去程航班。",
+  flights:[
+    {title:"星宇札幌回台中", date:"2027-02-28", startt:"10:00", endt:"11:00", note:"行事曆未寫航班代號；紀錄時段為 10:00–11:00。"}
+  ],
+  hotels:[
+    {title:"宿：Dormy inn 小樽", checkin:"2027-02-20", checkout:"2027-02-25", allDay:true,
+     location:"天然溫泉 燈之湯 多美迎PREMIUM小樽, 3-chōme-9-1 Inaho, Otaru, Hokkaido 047-0032日本"},
+    {title:"宿：omo5 小樽", checkin:"2027-02-24", checkout:"2027-03-01", allDay:true,
+     location:"OMO5 小樽 by 星野集團, 1-chōme-6-31 Ironai, Otaru, Hokkaido 047-0031日本"}
+  ],
+  events:{
+    "2027-02-20":[{type:"stay", time:"住宿", title:"入住 Dormy inn 小樽", detail:"天然溫泉 燈之湯 多美迎PREMIUM小樽\n3-chōme-9-1 Inaho, Otaru, Hokkaido 047-0032日本\n退房日 2月25日"}],
+    "2027-02-21":[{type:"stay", time:"住宿", title:"Dormy inn 小樽", detail:"續住，退房日 2月25日"}],
+    "2027-02-22":[{type:"stay", time:"住宿", title:"Dormy inn 小樽", detail:"續住，退房日 2月25日"}],
+    "2027-02-23":[{type:"stay", time:"住宿", title:"Dormy inn 小樽", detail:"續住，退房日 2月25日"}],
+    "2027-02-24":[
+      {type:"stay", time:"住宿", title:"Dormy inn 小樽", detail:"續住，退房日 2月25日"},
+      {type:"stay", time:"住宿", title:"入住 omo5 小樽", detail:"OMO5 小樽 by 星野集團\n1-chōme-6-31 Ironai, Otaru, Hokkaido 047-0031日本\n退房日 3月1日"}
+    ],
+    "2027-02-25":[
+      {type:"stay", time:"退房", title:"Dormy inn 小樽 退房", detail:"全日活動的退房日為 2月25日"},
+      {type:"stay", time:"住宿", title:"omo5 小樽", detail:"續住，退房日 3月1日"}
+    ],
+    "2027-02-26":[{type:"stay", time:"住宿", title:"omo5 小樽", detail:"續住，退房日 3月1日"}],
+    "2027-02-27":[{type:"stay", time:"住宿", title:"omo5 小樽", detail:"續住，退房日 3月1日"}],
+    "2027-02-28":[
+      {type:"fly", time:"10:00", time2:"11:00", title:"星宇札幌回台中", detail:"10:00–11:00（台北時間）"},
+      {type:"stay", time:"住宿", title:"omo5 小樽", detail:"續住，退房日 3月1日"}
+    ],
+    "2027-03-01":[
+      {type:"stay", time:"退房", title:"omo5 小樽 退房", detail:"全日活動的退房日為 3月1日。主日曆「阿馬的北海道」區塊也在這天結束。"}
+    ]
+  }
+},
+{
+  id:"osaka", short:"大阪", title:"大阪",
+  period:"2027年4月1日 − 4月6日", start:"2027-04-01", end:"2027-04-06",
+  illu:"osaka", ski:false,
+  blurb:"ETING 日曆全日區塊 4/1–4/6。住宿依序為神戶三宮、京都堀川五条、大阪心齋橋（皆 Comfort Hotel）。回程 Air Asia（T1:D7379）4/6 20:55–23:05，地點關西國際機場。沒有去程航班。4月2日退房後到 4月4日入住前，行事曆沒有住宿。",
+  flights:[
+    {title:"Air Asia(T1:D7379)", date:"2027-04-06", startt:"20:55", endt:"23:05",
+     location:"關西國際機場, 1番地 Senshūkūkōkita, Izumisano, Osaka 549-0001日本",
+     note:"航班代號依標題為 D7379。未寫抵達地。"}
+  ],
+  hotels:[
+    {title:"Comfort Hotel ERA Kobe Sannomiya", checkin:"2027-04-01", checkout:"2027-04-02",
+     cit:"16:00", cot:"11:00",
+     location:"4-chōme-2-10 Kumoidōri, Chuo Ward, Kobe, Hyogo 651-0096日本"},
+    {title:"Comfort Hotel Kyoto Horikawagojo", checkin:"2027-04-04", checkout:"2027-04-05",
+     cit:"16:00", cot:"10:00",
+     location:"134-32 Sensuichō, Shimogyo Ward, Kyoto, 600-8338日本"},
+    {title:"Comfort Hotel Osaka Shinsaibashi", checkin:"2027-04-05", checkout:"2027-04-06",
+     cit:"16:00", cot:"11:00",
+     location:"日本〒542-0083 Osaka, Chuo Ward, Higashishinsaibashi, 1-chōme−15−15 いちご心斎橋ビル"}
+  ],
+  events:{
+    "2027-04-01":[
+      {type:"stay", time:"16:00", title:"入住 Comfort Hotel ERA Kobe Sannomiya", detail:"16:00 入住，翌日 11:00 退房\n4-chōme-2-10 Kumoidōri, Chuo Ward, Kobe, Hyogo 651-0096日本"}
+    ],
+    "2027-04-02":[
+      {type:"stay", time:"11:00", title:"Comfort Hotel ERA Kobe Sannomiya 退房", detail:"11:00 退房"},
+      {type:"gap", time:"—", title:"行事曆尚無其他行程", detail:"下一筆住宿是 4月4日 16:00 京都堀川五条。"}
+    ],
+    "2027-04-03":[
+      {type:"gap", time:"—", title:"行事曆尚無行程", detail:"未登記住宿或活動。"}
+    ],
+    "2027-04-04":[
+      {type:"stay", time:"16:00", title:"入住 Comfort Hotel Kyoto Horikawagojo", detail:"16:00 入住，翌日 10:00 退房\n134-32 Sensuichō, Shimogyo Ward, Kyoto, 600-8338日本"}
+    ],
+    "2027-04-05":[
+      {type:"stay", time:"10:00", title:"Comfort Hotel Kyoto Horikawagojo 退房", detail:"10:00 退房"},
+      {type:"stay", time:"16:00", title:"入住 Comfort Hotel Osaka Shinsaibashi", detail:"16:00 入住，翌日 11:00 退房\nOsaka, Chuo Ward, Higashishinsaibashi, 1-chōme−15−15 いちご心斎橋ビル"}
+    ],
+    "2027-04-06":[
+      {type:"stay", time:"11:00", title:"Comfort Hotel Osaka Shinsaibashi 退房", detail:"11:00 退房"},
+      {type:"fly", time:"20:55", time2:"23:05", title:"Air Asia(T1:D7379)", detail:"20:55–23:05（台北時間）\n關西國際機場"}
+    ]
+  }
+}
+];
+
+let current=TRIPS[0].id;
+let currentSec="home";
+let currentDay={};
+
+function $(id){return document.getElementById(id)}
+function trip(){return TRIPS.find(t=>t.id===current)}
+
+function countdownHtml(t){
+  const today=todayIso();
+  const n=daysBetween(today,t.start);
+  let head,body;
+  if(n>0){head=n;body="天後出發";}
+  else if(today>=t.start && today<=t.end){head="旅行中";body="今天在行程裡";}
+  else {head="已結束";body="這趟已過";}
+  const num=typeof head==="number"?`<p class="big">${head}<em>天</em></p>`:`<p class="big" style="font-size:36px">${head}</p>`;
+  return `<div class="card yellow"><p class="kicker">出發倒數</p>${num}<p class="note">${body} · 以台北時間計算，今天是 ${fmtFull(today)}</p></div>`;
+}
+
+function renderTripBar(){
+  $("tripBar").innerHTML=TRIPS.map(t=>`<button class="trip-btn${t.id===current?" on":""}" data-id="${t.id}" role="tab" aria-selected="${t.id===current}">${t.short}</button>`).join("");
+}
+function renderHome(){
+  const t=trip();
+  $("sec-home").innerHTML=`
+    <div class="hero">
+      <div class="illu">${ILLU[t.illu]}</div>
+      <h2 class="ttl">${t.title}</h2>
+      <p class="sub">${t.period}</p>
+    </div>
+    ${countdownHtml(t)}
+    <div class="card">
+      <p class="kicker">這趟現有資料</p>
+      <p class="note">${t.blurb}</p>
+      <p class="note muted">航班 ${t.flights.length} 筆 · 住宿 ${t.hotels.length} 筆</p>
+    </div>`;
+}
+function renderFlights(){
+  const t=trip();
+  if(!t.flights.length){
+    $("sec-flights").innerHTML=`<h3 class="sec-title">航班</h3><div class="empty">這趟行事曆沒有航班紀錄。</div>`;
+    return;
+  }
+  $("sec-flights").innerHTML=`<h3 class="sec-title">航班</h3>`+t.flights.map(f=>`
+    <div class="card water">
+      <span class="tag fly">飛機</span>
+      <h3 style="margin:8px 0 0;font-size:20px;font-weight:400">${f.title}</h3>
+      <p class="note">${fmtFull(f.date)}</p>
+      <p class="big" style="font-size:32px;margin-top:6px">${f.startt}<em style="font-size:16px;margin:0 8px">→</em>${f.endt}</p>
+      ${f.location?`<p class="note">${f.location}</p>`:""}
+      ${f.note?`<p class="muted">${f.note}</p>`:""}
+    </div>`).join("");
+}
+function renderDays(){
+  const t=trip();
+  const days=rangeDays(t.start,t.end);
+  if(!currentDay[t.id]) currentDay[t.id]=days[0];
+  const day=currentDay[t.id];
+  const evs=t.events[day]||[];
+  $("sec-days").innerHTML=`
+    <h3 class="sec-title">每日行程</h3>
+    <div class="days-bar">${days.map(d=>{
+      const dt=new Date(d+"T12:00:00+08:00");
+      const [y,m,dd]=d.split("-");
+      return `<button class="day-btn${d===day?" on":""}" data-day="${d}"><span class="md">${Number(m)}/${Number(dd)}</span><span class="wk">週${WEEK[dt.getDay()]}</span></button>`;
+    }).join("")}</div>
+    <div id="tlWrap" class="bounce">
+      <p class="muted" style="margin:0 0 10px">${fmtFull(day)}</p>
+      ${evs.length?`<div class="timeline">${evs.map(e=>`
+        <div class="tl-item ${e.type}">
+          <div class="tl-time">${e.time}${e.time2?"<br>"+e.time2:""}</div>
+          <div class="tl-dot"></div>
+          <div class="tl-body">
+            <span class="tag ${e.type==="fly"?"fly":e.type==="stay"?"stay":e.type==="gap"?"warn":"act"}">${e.type==="fly"?"飛機":e.type==="stay"?"住宿":e.type==="gap"?"待補":"行程"}</span>
+            <h3>${e.title}</h3>
+            ${e.detail?`<p>${e.detail.replace(/\n/g,"<br>")}</p>`:""}
+          </div>
+        </div>`).join("")}</div>`:
+        `<div class="empty">這天行事曆沒有登記行程。</div>`}
+    </div>`;
+  const on=document.querySelector(".day-btn.on");
+  if(on) on.scrollIntoView({inline:"center",block:"nearest",behavior:"instant"});
+}
+function renderHotels(){
+  const t=trip();
+  if(!t.hotels.length){
+    $("sec-hotels").innerHTML=`<h3 class="sec-title">住宿</h3><div class="empty">這趟行事曆沒有住宿紀錄。</div>`;
+    return;
+  }
+  $("sec-hotels").innerHTML=`<h3 class="sec-title">住宿</h3>`+t.hotels.map(h=>`
+    <div class="card green">
+      <span class="tag stay">住宿</span>
+      <h3 style="margin:8px 0 0;font-size:20px;font-weight:400">${h.title}</h3>
+      <p class="note">入住 ${fmtFull(h.checkin)}${h.cit?" "+h.cit:""}<br>退房 ${fmtFull(h.checkout)}${h.cot?" "+h.cot:""}</p>
+      ${h.location?`<p class="note">${h.location}</p>`:""}
+      ${h.allDay?`<p class="muted">全日活動，退房日為結束日（不含當晚）。</p>`:""}
+    </div>`).join("");
+}
+function listKey(kind){return "travel-techo-"+current+"-"+kind}
+function loadList(kind, defaults){
+  try{
+    const raw=localStorage.getItem(listKey(kind));
+    if(raw){const arr=JSON.parse(raw);if(Array.isArray(arr)) return arr;}
+  }catch(e){}
+  return defaults.map((text,i)=>({id:kind+"-"+i,text,done:false}));
+}
+function saveList(kind, arr){try{localStorage.setItem(listKey(kind),JSON.stringify(arr))}catch(e){}}
+function listBlock(title, kind, items, canAdd){
+  return `<div class="card" data-list="${kind}">
+    <h3 class="sec-title" style="margin-top:0">${title}</h3>
+    <ul class="list">${items.map(it=>`
+      <li class="${it.done?"done":""}">
+        <input type="checkbox" id="${it.id}" ${it.done?"checked":""}>
+        <label for="${it.id}">${it.text}</label>
+      </li>`).join("")||`<li class="muted" style="border:0">還沒有項目。</li>`}</ul>
+    ${canAdd?`<div class="add-row"><input type="text" placeholder="新增一項…" aria-label="新增${title}"><button type="button">加入</button></div>`:""}
+  </div>`;
+}
+function renderLists(){
+  const t=trip();
+  const todo=loadList("todo", []);
+  const pre=loadList("pre", PRE);
+  const bag=loadList("bag", t.ski?BAG.concat(SKI):BAG);
+  $("sec-lists").innerHTML=`<h3 class="sec-title">清單</h3>
+    ${listBlock("待辦清單","todo",todo,true)}
+    ${listBlock("出發前清單","pre",pre,true)}
+    ${listBlock(t.ski?"行李清單（含滑雪裝備）":"行李清單","bag",bag,true)}`;
+}
+function showSec(sec){
+  currentSec=sec;
+  document.querySelectorAll("nav.menu button").forEach(b=>b.classList.toggle("on",b.dataset.sec===sec));
+  ["home","flights","days","hotels","lists"].forEach(s=>{
+    const el=$("sec-"+s);
+    el.classList.toggle("show",s===sec);
+  });
+  const render={home:renderHome,flights:renderFlights,days:renderDays,hotels:renderHotels,lists:renderLists};
+  render[sec]();
+  window.scrollTo(0,0);
+}
+function selectTrip(id){
+  current=id;
+  renderTripBar();
+  showSec(currentSec==="home"?"home":currentSec);
+}
+
+document.addEventListener("click",e=>{
+  const tb=e.target.closest(".trip-btn");
+  if(tb){selectTrip(tb.dataset.id);return}
+  const mb=e.target.closest("nav.menu button");
+  if(mb){showSec(mb.dataset.sec);return}
+  const db=e.target.closest(".day-btn");
+  if(db){
+    currentDay[current]=db.dataset.day;
+    renderDays();
+    const wrap=$("tlWrap");
+    if(wrap){wrap.classList.remove("bounce");void wrap.offsetWidth;wrap.classList.add("bounce")}
+    return;
+  }
+  const add=e.target.closest("[data-list] .add-row button");
+  if(add){
+    const box=add.closest("[data-list]");
+    const kind=box.dataset.list;
+    const input=box.querySelector("input[type=text]");
+    const text=(input.value||"").trim();
+    if(!text) return;
+    const defaults=kind==="pre"?PRE:kind==="bag"?(trip().ski?BAG.concat(SKI):BAG):[];
+    const arr=loadList(kind,defaults);
+    arr.push({id:kind+"-"+Date.now(),text,done:false});
+    saveList(kind,arr);input.value="";renderLists();return;
+  }
+});
+document.addEventListener("change",e=>{
+  const box=e.target.closest("[data-list]");
+  if(!box||e.target.type!=="checkbox")return;
+  const kind=box.dataset.list;
+  const defaults=kind==="pre"?PRE:kind==="bag"?(trip().ski?BAG.concat(SKI):BAG):[];
+  const arr=loadList(kind,defaults);
+  const it=arr.find(x=>x.id===e.target.id);
+  if(it){it.done=e.target.checked;saveList(kind,arr);e.target.closest("li").classList.toggle("done",it.done)}
+});
+document.addEventListener("keydown",e=>{
+  if(e.key!=="Enter")return;
+  const input=e.target.closest("[data-list] .add-row input");
+  if(!input)return;
+  const btn=input.parentElement.querySelector("button");
+  if(btn)btn.click();
+});
+
+(function init(){
+  const q=new URLSearchParams(location.search);
+  if(q.get("trip")&&TRIPS.some(t=>t.id===q.get("trip"))) current=q.get("trip");
+  if(q.get("day")) currentDay[current]=q.get("day");
+  const view=q.get("view")||"home";
+  renderTripBar();
+  showSec(["home","flights","days","hotels","lists"].includes(view)?view:"home");
+})();
+</script>
+</body>
+</html>
