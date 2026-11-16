@@ -1,701 +1,1043 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-Hant-TW">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
 <title>彎彎腰の旅手帳</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Huninn&display=swap" rel="stylesheet">
 <style>
 :root{
-  --paper:#FFFCF6;
-  --ink:#3E3A39;
-  --coral:#F2A497;
-  --yellow:#F6D27A;
-  --water:#A8D3E6;
-  --green:#B9DAA5;
-  --line:3px;
-  --radius:28px;
-  --radius-sm:18px;
-  --pad:18px;
-  --header-h:122px;
-  --shadow:none;
+  --paper:#FFFCF6; --card:#FFFFFF; --ink:#3E3A39; --muted:#6B6563;
+  --coral:#F2A497; --yellow:#F6D27A; --mizu:#A8D3E6; --green:#B9DAA5;
+  --r-xl:32px; --r-lg:24px; --r-md:18px;
+  --nav-h:62px;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
 }
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:"Huninn",sans-serif;font-weight:400;line-height:1.55}
-body{min-height:100dvh}
-.grain{pointer-events:none;position:fixed;inset:0;z-index:0;opacity:.4;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ccircle cx='8' cy='14' r='1' fill='%233E3A39' opacity='.12'/%3E%3Ccircle cx='52' cy='6' r='1' fill='%233E3A39' opacity='.1'/%3E%3Ccircle cx='28' cy='48' r='1' fill='%233E3A39' opacity='.1'/%3E%3Ccircle cx='70' cy='36' r='1' fill='%233E3A39' opacity='.12'/%3E%3Ccircle cx='16' cy='70' r='1' fill='%233E3A39' opacity='.08'/%3E%3C/svg%3E")}
-.wrap{position:relative;z-index:1;max-width:460px;margin:0 auto;padding:0 16px calc(28px + env(safe-area-inset-bottom))}
+*,*::before,*::after{box-sizing:inherit}
+html{background:var(--paper);scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + var(--nav-h) + 14px)}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Huninn","jf-openhuninn","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;
+  font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+button{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:3px dashed var(--ink);outline-offset:3px;border-radius:10px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
-header.top{
-  position:sticky;top:0;z-index:20;
-  background:var(--paper);
-  padding:10px 0 8px;
-  border-bottom:var(--line) solid var(--ink);
-}
-.brand{display:flex;align-items:baseline;justify-content:space-between;padding:0 2px 8px}
-.brand h1{font-size:18px;margin:0;letter-spacing:.04em}
-.brand span{font-size:12px;opacity:.7}
-.trips{display:flex;flex-wrap:wrap;gap:8px;padding:2px 2px 10px}
-.trip-btn{
-  flex:0 0 auto;border:var(--line) solid var(--ink);border-radius:999px;
-  background:var(--paper);color:var(--ink);font-family:inherit;font-size:13px;
-  padding:5px 11px;cursor:pointer;line-height:1.2;white-space:nowrap
-}
-.trip-btn.on{background:var(--coral)}
-nav.menu{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:0 2px}
-nav.menu::-webkit-scrollbar{display:none}
-nav.menu button{
-  flex:1 0 auto;border:var(--line) solid var(--ink);border-radius:14px;
-  background:var(--paper);color:var(--ink);font-family:inherit;font-size:13px;
-  padding:7px 10px;cursor:pointer
-}
-nav.menu button.on{background:var(--yellow)}
+/* ---------- 頂端選單 ---------- */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--paper);border-bottom:3px solid var(--ink)}
+.nav-in{max-width:680px;margin:0 auto;height:var(--nav-h);display:flex;align-items:center;gap:6px;padding:0 10px;overflow-x:auto;scrollbar-width:none}
+.nav-in::-webkit-scrollbar{display:none}
+.nav-logo{flex:none;width:40px;height:40px;display:grid;place-items:center;border:3px solid var(--ink);border-radius:50%;background:var(--coral);text-decoration:none}
+.nav a.link{flex:none;text-decoration:none;padding:5px 13px;border:3px solid transparent;border-radius:999px;font-size:15px;white-space:nowrap}
+.nav a.link.on{background:var(--yellow);border-color:var(--ink)}
 
-section{display:none;padding-top:18px;min-height:62vh}
-section.show{display:block}
-.hero{text-align:center;padding:6px 0 8px}
-.illu{width:100%;max-width:360px;height:220px;margin:0 auto;display:block}
-.illu svg{width:100%;height:100%;overflow:visible}
-h2.ttl{font-size:34px;margin:8px 0 0;letter-spacing:.08em}
-.sub{margin:4px 0 14px;font-size:15px}
+/* ---------- 版面 ---------- */
+.wrap{max-width:680px;margin:0 auto;padding:0 18px}
+section{margin:44px 0}
+.sec-h{display:flex;align-items:center;gap:12px;margin:0 0 16px;font-size:24px;font-weight:normal;letter-spacing:.06em}
+.sec-h .ic{flex:none;width:44px;height:44px;border:3px solid var(--ink);border-radius:50%;display:grid;place-items:center}
+.sec-h small{font-size:14px;color:var(--muted);letter-spacing:0;margin-left:auto}
+.card{background:var(--card);border:3px solid var(--ink);border-radius:var(--r-lg);box-shadow:0 5px 0 var(--ink);padding:18px}
 
-.card{
-  border:var(--line) solid var(--ink);
-  border-radius:var(--radius);
-  background:var(--paper);
-  padding:16px 18px;
-  margin:0 0 14px;
-}
-.card.coral{background:var(--coral)}
-.card.yellow{background:var(--yellow)}
-.card.water{background:var(--water)}
-.card.green{background:var(--green)}
-.kicker{font-size:12px;letter-spacing:.16em;margin:0 0 4px}
-.big{font-size:48px;line-height:1.05;margin:0}
-.big em{font-style:normal;font-size:18px;margin-left:4px}
-.note{font-size:13px;margin:8px 0 0}
-.muted{opacity:.75;font-size:13px}
+/* ---------- 首頁 ---------- */
+.hero{padding-top:18px}
+.hero-art{border:3px solid var(--ink);border-radius:var(--r-xl);background:var(--card);overflow:hidden;box-shadow:0 5px 0 var(--ink)}
+.hero-art svg{display:block;width:100%;height:auto}
+.hero h1{font-size:clamp(40px,12vw,58px);font-weight:normal;line-height:1.15;margin:22px 0 4px;letter-spacing:.08em}
+.hero .sub{margin:0;font-size:18px;color:var(--muted)}
+.date-chip{display:inline-block;margin-top:12px;padding:3px 14px;border:3px solid var(--ink);border-radius:999px;background:var(--mizu);font-size:15px}
+.cd{margin-top:22px}
+.cd-label{margin:0 0 10px;font-size:16px}
+.cd-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.cd-tile{border:3px solid var(--ink);border-radius:var(--r-md);text-align:center;padding:10px 0 6px}
+.cd-tile b{display:block;font-weight:normal;font-size:clamp(26px,8vw,36px);line-height:1.1;font-variant-numeric:tabular-nums}
+.cd-tile span{font-size:13px}
+.cd-msg{border:3px solid var(--ink);border-radius:var(--r-md);background:var(--green);padding:14px 16px;font-size:18px}
 
-.tag{
-  display:inline-block;border:2px solid var(--ink);border-radius:999px;
-  padding:1px 8px;font-size:11px;line-height:1.5;margin:0 6px 0 0;vertical-align:middle
-}
-.tag.fly{background:var(--water)}
-.tag.stay{background:var(--green)}
-.tag.act{background:var(--coral)}
-.tag.warn{background:var(--yellow)}
-.tag.must{background:var(--coral);font-weight:400}
+.switch{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 14px}
+.switch span.lbl{font-size:14px;color:var(--muted);margin-right:2px}
+.sw{display:inline-flex;align-items:center;gap:6px;border:3px solid var(--ink);border-radius:999px;background:var(--card);padding:4px 14px;cursor:pointer;box-shadow:0 3px 0 var(--ink);font-size:15px}
+.sw[aria-pressed="true"]{background:var(--green)}
+.sw:active{transform:translateY(3px);box-shadow:none}
+.sw em{font-style:normal;font-size:12px;padding:0 7px;border:2px solid var(--ink);border-radius:999px;background:var(--paper)}
+.hero-art.pop,.hero-text.pop{animation:pop .6s cubic-bezier(.3,1.5,.5,1) both}
+.hero-text.pop{animation-delay:.08s}
 
-.days-bar{display:flex;gap:8px;overflow-x:auto;padding:2px 20px 14px 2px;scrollbar-width:none}
-.days-bar::-webkit-scrollbar{display:none}
-.day-btn{
-  flex:0 0 auto;width:58px;border:var(--line) solid var(--ink);border-radius:20px;
-  background:var(--paper);color:var(--ink);font-family:inherit;cursor:pointer;
-  padding:8px 0 7px;text-align:center;line-height:1.2
-}
-.day-btn .md{font-size:15px;display:block}
-.day-btn .wk{font-size:11px;opacity:.75}
-.day-btn.on{background:var(--yellow)}
-.timeline{position:relative;padding:4px 0 8px 0}
-.tl-item{display:grid;grid-template-columns:64px 22px 1fr;gap:0 8px;margin:0 0 12px}
-.tl-time{font-size:13px;padding-top:12px;text-align:right}
-.tl-dot{position:relative}
-.tl-dot::before{
-  content:"";position:absolute;left:7px;top:0;bottom:-12px;width:3px;background:var(--ink)
-}
-.tl-item:last-child .tl-dot::before{bottom:auto;height:24px}
-.tl-dot::after{
-  content:"";position:absolute;left:2px;top:16px;width:13px;height:13px;border-radius:50%;
-  border:3px solid var(--ink);background:var(--yellow);z-index:1
-}
-.tl-item.fly .tl-dot::after{background:var(--water)}
-.tl-item.stay .tl-dot::after{background:var(--green)}
-.tl-item.act .tl-dot::after{background:var(--coral)}
-.tl-item.gap .tl-dot::after{background:var(--paper)}
-.tl-body{
-  border:var(--line) solid var(--ink);border-radius:var(--radius-sm);
-  padding:10px 12px;background:var(--paper)
-}
-.tl-item.fly .tl-body{background:var(--water)}
-.tl-item.stay .tl-body{background:var(--green)}
-.tl-item.act .tl-body{background:#F8EFE3}
-.tl-item.gap .tl-body{background:var(--paper)}
-.tl-body h3{margin:4px 0 0;font-size:16px;font-weight:400}
-.tl-body p{margin:4px 0 0;font-size:13px}
-.empty{text-align:center;padding:28px 12px;border:var(--line) solid var(--ink);border-radius:var(--radius);background:var(--yellow)}
+/* ---------- 航班 ---------- */
+.flights{display:grid;gap:18px}
+.pass{position:relative;padding:0;overflow:visible}
+.pass-top{display:flex;align-items:center;gap:8px;padding:14px 18px 0}
+.pill{display:inline-block;padding:1px 12px;border:2.5px solid var(--ink);border-radius:999px;font-size:14px}
+.pass-top .no{margin-left:auto;font-size:15px;color:var(--muted)}
+.route{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;padding:10px 18px 16px}
+.port b{display:block;font-weight:normal;font-size:38px;line-height:1.05;letter-spacing:.04em}
+.port span{font-size:14px;color:var(--muted)}
+.port .t{display:block;font-size:20px;color:var(--ink);margin-top:2px}
+.port.r{text-align:right}
+.route svg{width:100%;height:40px}
+.pass-cut{position:relative;border-top:3px dashed var(--ink);margin:0 18px}
+.pass-cut::before,.pass-cut::after{content:"";position:absolute;top:-14px;width:24px;height:24px;border-radius:50%;background:var(--paper);border:3px solid var(--ink)}
+.pass-cut::before{left:-33px;clip-path:inset(0 0 0 50%)}
+.pass-cut::after{right:-33px;clip-path:inset(0 50% 0 0)}
+.pass-info{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px 18px 16px;font-size:14px}
+.pass-info dt{color:var(--muted);font-size:12.5px}
+.pass-info dd{margin:0}
 
-.list{list-style:none;margin:0;padding:0}
-.list li{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:2px solid var(--ink)}
-.list li:last-child{border-bottom:0}
-.list input{accent-color:var(--ink);width:20px;height:20px;margin-top:3px;flex:0 0 auto}
-.list label{flex:1;font-size:15px}
-.list li.done label{text-decoration:line-through;opacity:.5}
-.add-row{display:flex;gap:8px;margin-top:10px}
-.add-row input[type=text]{
-  flex:1;border:var(--line) solid var(--ink);border-radius:14px;background:var(--paper);
-  font-family:inherit;font-size:14px;padding:8px 12px;color:var(--ink)
-}
-.add-row button{
-  border:var(--line) solid var(--ink);border-radius:14px;background:var(--green);
-  font-family:inherit;font-size:14px;padding:8px 12px;cursor:pointer;color:var(--ink)
-}
-.sec-title{font-size:20px;margin:6px 0 12px;letter-spacing:.06em}
+/* ---------- 每日行程 ---------- */
+.tabs{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 12px;margin:0 -2px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:1 0 64px;min-width:64px;border:3px solid var(--ink);border-radius:var(--r-md);background:var(--card);padding:6px 4px 6px;cursor:pointer;text-align:center;line-height:1.25;box-shadow:0 4px 0 var(--ink);transition:transform .15s}
+.tab small{display:block;font-size:12px;color:var(--muted)}
+.tab b{display:block;font-weight:normal;font-size:20px}
+.tab[aria-selected="true"]{background:var(--yellow);transform:translateY(-3px)}
+.tab[aria-selected="true"] small{color:var(--ink)}
+.tab.boing{animation:boing .5s cubic-bezier(.3,1.6,.5,1)}
 
-.source{font-size:12px;opacity:.7;margin:18px 0 8px;text-align:center;line-height:1.6}
+.day-head{display:flex;align-items:center;gap:14px;padding:12px 16px}
+.day-head svg{flex:none;width:112px;height:auto}
+.day-head h3{margin:0;font-size:22px;font-weight:normal;line-height:1.3}
+.day-head p{margin:2px 0 0;font-size:14px;color:var(--muted)}
 
-.illu .bob{transform-origin:center;animation:bob 3.6s ease-in-out infinite}
-.illu .bob2{animation:bob 4.4s ease-in-out infinite .4s}
-.illu .sway{transform-box:fill-box;transform-origin:center bottom;animation:sway 3.2s ease-in-out infinite}
-.illu .chug{animation:chug 3s ease-in-out infinite}
-.illu .flake{animation:flake 4.8s linear infinite}
-.bounce{animation:pop .42s cubic-bezier(.2,1.4,.4,1)}
-@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
-@keyframes sway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(3deg)}}
-@keyframes chug{0%,100%{transform:translateX(0)}50%{transform:translateX(10px)}}
-@keyframes flake{0%{transform:translateY(-6px);opacity:.2}20%{opacity:.9}100%{transform:translateY(46px);opacity:0}}
-@keyframes pop{0%{transform:translateY(10px) scale(.96);opacity:.4}100%{transform:translateY(0) scale(1);opacity:1}}
-@media (prefers-reduced-motion:reduce){
-  .illu .bob,.illu .bob2,.illu .sway,.illu .chug,.illu .flake,.bounce{animation:none!important}
+.tl{list-style:none;margin:22px 0 0;padding:0}
+.tl-item{display:grid;grid-template-columns:48px 22px 1fr;gap:0 8px;position:relative}
+.tl-time{text-align:right;padding-top:13px;font-size:16px;font-variant-numeric:tabular-nums}
+.tl-rail{position:relative}
+.tl-rail::before{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:3px dashed var(--ink);transform:translateX(-50%)}
+.tl-item:first-child .tl-rail::before{top:20px}
+.tl-item:last-child .tl-rail::before{bottom:auto;height:20px}
+.tl-dot{position:absolute;left:50%;top:14px;width:18px;height:18px;margin-left:-9px;border:3px solid var(--ink);border-radius:50%;background:var(--card)}
+.tl-card{position:relative;margin-bottom:16px;padding:11px 14px 12px;border:3px solid var(--ink);border-radius:var(--r-md);background:var(--card)}
+.tl-card h4{margin:0;font-size:17.5px;font-weight:normal;line-height:1.4}
+.tl-card p{margin:3px 0 0;font-size:14px;color:var(--muted)}
+.tl-card.must{background:#FFF6F3;padding-right:62px}
+.stamp{position:absolute;top:-12px;right:-8px;width:54px;height:54px;border:3px solid var(--ink);border-radius:50%;background:var(--coral);display:grid;place-items:center;font-size:15px;transform:rotate(-12deg)}
+.stamp::after{content:"";position:absolute;inset:4px;border:2px dashed var(--ink);border-radius:50%}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tag{display:inline-flex;align-items:center;gap:4px;padding:1px 10px 1px 6px;border:2.5px solid var(--ink);border-radius:999px;font-size:13px;line-height:1.5}
+.tag svg{width:15px;height:15px}
+
+.day-panel.pop .day-head,.day-panel.pop .tl-item{animation:pop .6s cubic-bezier(.3,1.5,.5,1) both;animation-delay:calc(var(--i,0) * 55ms)}
+
+/* ---------- 住宿 ---------- */
+.stays{display:grid;gap:18px}
+.stay-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.stay-top svg{flex:none;width:56px;height:56px}
+.stay h3{margin:0;font-size:19px;font-weight:normal;line-height:1.35}
+.stay-top p{margin:0;font-size:14px;color:var(--muted)}
+.stay dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0;font-size:15px}
+.stay dt{color:var(--muted)}
+.stay dd{margin:0}
+.btn{display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:6px 16px;border:3px solid var(--ink);border-radius:999px;background:var(--mizu);text-decoration:none;font-size:15px;box-shadow:0 3px 0 var(--ink);cursor:pointer}
+.btn:active{transform:translateY(3px);box-shadow:none}
+
+/* ---------- 清單 ---------- */
+.list-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.bar{flex:1;height:16px;border:3px solid var(--ink);border-radius:999px;background:var(--card);overflow:hidden}
+.bar i{display:block;height:100%;width:0;transition:width .4s cubic-bezier(.3,1.4,.5,1)}
+.count{font-size:15px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.reset{border:0;background:none;padding:2px 4px;font-size:13px;color:var(--muted);text-decoration:underline;cursor:pointer}
+.checks{list-style:none;margin:0;padding:0}
+.checks li+li{border-top:2px dashed #D8D2CC}
+.check{display:flex;align-items:center;gap:12px;padding:10px 2px;cursor:pointer}
+.check input{position:absolute;opacity:0;width:1px;height:1px}
+.box{flex:none;width:28px;height:28px;border:3px solid var(--ink);border-radius:9px;background:var(--card);display:grid;place-items:center}
+.box svg{width:18px;height:18px;opacity:0}
+.check input:checked+.box{animation:boing .45s cubic-bezier(.3,1.6,.5,1)}
+.check input:checked+.box svg{opacity:1}
+.check input:checked~.txt{text-decoration:line-through;text-decoration-thickness:2px;color:var(--muted)}
+.check input:focus-visible+.box{outline:3px dashed var(--ink);outline-offset:3px}
+.txt{flex:1}
+.note{font-size:13px;color:var(--muted);margin-left:6px}
+.grp{margin:16px 0 4px;display:flex;align-items:center;gap:8px;font-size:16px}
+.grp i{width:14px;height:14px;border:2.5px solid var(--ink);border-radius:50%}
+.grp:first-of-type{margin-top:4px}
+
+footer{text-align:center;padding:10px 0 40px;color:var(--muted);font-size:14px}
+footer svg{width:150px;height:auto;display:block;margin:0 auto 6px}
+
+/* ---------- 動畫 ---------- */
+@keyframes pop{0%{opacity:0;transform:translateY(18px) scale(.96)}55%{opacity:1;transform:translateY(-6px) scale(1.01)}80%{transform:translateY(2px)}100%{opacity:1;transform:none}}
+@keyframes boing{0%{transform:scale(1)}35%{transform:scale(.85)}65%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes drift{from{transform:translateX(-8px)}to{transform:translateX(10px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2.5px)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes sway{0%,100%{transform:rotate(-2.5deg)}50%{transform:rotate(2.5deg)}}
+@keyframes snow{0%{transform:translateY(-10px);opacity:0}15%{opacity:1}85%{opacity:1}100%{transform:translateY(70px);opacity:0}}
+@keyframes nod{0%,70%,100%{transform:rotate(0)}80%{transform:rotate(14deg)}90%{transform:rotate(0)}}
+svg .a{transform-box:fill-box;transform-origin:center}
+.a-drift{animation:drift 7s ease-in-out infinite alternate}
+.a-drift2{animation:drift 9s ease-in-out -3s infinite alternate-reverse}
+.a-spin{animation:spin 40s linear infinite}
+.a-bob{animation:bob 1.1s ease-in-out infinite}
+.a-float{animation:float 3s ease-in-out infinite}
+.a-sway{animation:sway 4s ease-in-out infinite;transform-origin:50% 100%!important}
+.a-swing{animation:sway 3.5s ease-in-out infinite;transform-origin:50% 0!important}
+.a-snow{animation:snow 6s linear infinite}
+.a-nod{animation:nod 4s ease-in-out infinite;transform-origin:20% 90%!important}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .a-snow{opacity:1}
+}
+@media (min-width:720px){
+  .flights,.stays{grid-template-columns:1fr 1fr}
+  .hero{display:grid;grid-template-columns:1.15fr 1fr;gap:0 26px;align-items:center;padding-top:30px}
+  .switch{grid-column:1/-1}
+  .hero h1{margin-top:0}
 }
 </style>
 </head>
 <body>
-<div class="grain" aria-hidden="true"></div>
-<header class="top">
-  <div class="wrap">
-    <div class="brand"><h1>彎彎腰の旅手帳</h1><span>行事曆原樣入冊</span></div>
-    <div class="trips" id="tripBar" role="tablist" aria-label="行程切換"></div>
-    <nav class="menu" id="menu" aria-label="頁面選單">
-      <button data-sec="home" class="on">首頁</button>
-      <button data-sec="flights">航班</button>
-      <button data-sec="days">每日行程</button>
-      <button data-sec="hotels">住宿</button>
-      <button data-sec="lists">清單</button>
-    </nav>
-  </div>
+
+<header class="nav">
+  <nav class="nav-in" aria-label="頁面選單">
+    <a class="nav-logo" href="#top" aria-label="回到首頁">
+      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 6 Q12 2 22 6 V9 Q12 5 2 9Z" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2" stroke-linejoin="round"/><path d="M6 8 V22 M18 8 V22 M4 12 H20" stroke="#3E3A39" stroke-width="2.6" stroke-linecap="round"/></svg>
+    </a>
+    <a class="link" href="#top">首頁</a>
+    <a class="link" href="#flight">航班</a>
+    <a class="link" href="#plan">行程</a>
+    <a class="link" href="#todo">待辦</a>
+    <a class="link" href="#stay">住宿</a>
+    <a class="link" href="#prep">出發前</a>
+    <a class="link" href="#pack">行李</a>
+  </nav>
 </header>
-<div class="wrap">
-  <section id="sec-home" class="show"></section>
-  <section id="sec-flights"></section>
-  <section id="sec-days"></section>
-  <section id="sec-hotels"></section>
-  <section id="sec-lists"></section>
-  <p class="source">資料來源：Google 行事曆<br>只顯示行事曆既有內容，沒有補寫景點或航班。時間依紀錄為台北時間（Asia/Taipei）。</p>
-</div>
+
+<main class="wrap">
+  <section id="top" class="hero" style="margin-top:0">
+    <div class="switch" role="group" aria-label="切換旅程" id="switch"></div>
+    <div class="hero-art" id="heroArt" role="img"></div>
+    <div class="hero-text" id="heroText">
+      <h1 id="tripTitle"></h1>
+      <p class="sub" id="tripSub"></p>
+      <span class="date-chip" id="tripDates"></span>
+      <div class="cd" id="countdown" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section id="flight">
+    <h2 class="sec-h"><span class="ic" style="background:var(--coral)" data-icon="plane"></span>航班</h2>
+    <div class="flights" id="flights"></div>
+  </section>
+
+  <section id="plan">
+    <h2 class="sec-h"><span class="ic" style="background:var(--yellow)" data-icon="cal"></span>每日行程</h2>
+    <div class="tabs" role="tablist" aria-label="選擇日期" id="tabs"></div>
+    <div class="day-panel" role="tabpanel" id="dayPanel" tabindex="-1"></div>
+  </section>
+
+  <section id="todo">
+    <h2 class="sec-h"><span class="ic" style="background:var(--coral)" data-icon="star"></span>旅途待辦</h2>
+    <div class="card" data-list="todo"></div>
+  </section>
+
+  <section id="stay">
+    <h2 class="sec-h"><span class="ic" style="background:var(--green)" data-icon="house"></span>住宿</h2>
+    <div class="stays" id="stays"></div>
+  </section>
+
+  <section id="prep">
+    <h2 class="sec-h"><span class="ic" style="background:var(--mizu)" data-icon="clip"></span>出發前清單</h2>
+    <div class="card" data-list="prep"></div>
+  </section>
+
+  <section id="pack">
+    <h2 class="sec-h"><span class="ic" style="background:var(--yellow)" data-icon="bag"></span>行李清單</h2>
+    <div class="card" data-list="pack"></div>
+  </section>
+</main>
+
+<footer id="foot"></footer>
+
 <script>
-const WEEK=["日","一","二","三","四","五","六"];
-const TZ="Asia/Taipei";
+/* =========================================================
+   旅程資料：每一趟旅程是 TRIPS 裡的一個物件，改這裡就好
+   move：plane 飛機 / train 電車 / subway 地鐵 / bus 巴士 / walk 步行
+   must:true 會蓋「必去」印章
+   art（當天插圖）：plane torii bamboo deer castle lantern ski snowman fuji dog tower
+   hero（首頁插圖）：tokyo / kansai
+   ========================================================= */
+const TRIPS = [
+{
+  id: "tokyo-dec",
+  label: "東京 12月",
+  hero: "tokyo",
+  title: "東京",
+  subtitle: "12 月行程",
+  dates: "2026.12.16 – 12.23",
+  start: "2026-12-16T14:00:00+08:00",
+  end:   "2026-12-23T22:10:00+08:00",
+  flights: [
+    { dir:"去程", airline:"酷航", no:"", date:"12/16（三）",
+      from:{code:"桃園", city:"桃園機場", time:"14:00"}, to:{code:"—", city:"行事曆未寫", time:"18:00"},
+      dur:"行事曆未寫", term:"桃園機場T1", bag:"行事曆未寫" },
+    { dir:"回程", airline:"酷航", no:"", date:"12/23（三）",
+      from:{code:"成田", city:"成田（T1)", time:"18:55"}, to:{code:"—", city:"行事曆未寫", time:"22:10"},
+      dur:"行事曆未寫", term:"成田（T1)", bag:"行事曆未寫" }
+  ],
+  days: [
+    { date:"12/16", week:"週三", title:"出發與入住", area:"酷航・東橫大手町", art:"plane", items:[
+      { t:"14:00", title:"酷航桃園機場T1", note:"14:00–18:00（台北時間）。行事曆未寫航班代號與抵達機場。", move:["plane"] },
+      { t:"住宿", title:"入住 東橫大手町", note:"全日活動，退房日 12月18日" }
+    ]},
+    { date:"12/17", week:"週四", title:"東橫大手町", area:"東橫大手町", art:"", items:[
+      { t:"住宿", title:"東橫大手町", note:"續住，退房日 12月18日" }
+    ]},
+    { date:"12/18", week:"週五", title:"東橫大手町退房", area:"東京", art:"", items:[
+      { t:"退房", title:"東橫大手町 退房", note:"全日活動的退房日為 12月18日。這天到 12月20日，行事曆沒有下一筆住宿或活動。" }
+    ]},
+    { date:"12/19", week:"週六", title:"行事曆尚無行程", area:"", art:"", items:[]},
+    { date:"12/20", week:"週日", title:"行事曆尚無行程", area:"", art:"", items:[]},
+    { date:"12/21", week:"週一", title:"入住 Belken Hotel Kanda", area:"Belken Hotel Kanda", art:"", items:[
+      { t:"住宿", title:"入住 Belken Hotel Kanda", note:"全日活動，退房日 12月24日" }
+    ]},
+    { date:"12/22", week:"週二", title:"Belken Hotel Kanda", area:"Belken Hotel Kanda", art:"", items:[
+      { t:"住宿", title:"Belken Hotel Kanda", note:"續住，退房日 12月24日" }
+    ]},
+    { date:"12/23", week:"週三", title:"回程", area:"Belken Hotel Kanda・酷航", art:"plane", items:[
+      { t:"住宿", title:"Belken Hotel Kanda", note:"續住，退房日 12月24日" },
+      { t:"18:55", title:"酷航成田（T1)", note:"18:55–22:10（台北時間）。行事曆未寫航班代號與抵達地。", move:["plane"] }
+    ]}
+  ],
+  stays: [
+    { name:"東橫大手町", city:"東京", nights:"12/16 – 12/18・2 晚", color:"#F2A497",
+      checkin:"12月16日（全日）", checkout:"12月18日（全日活動結束日）", addr:"行事曆未寫", access:"行事曆未寫",
+      memo:"行事曆標題為「住宿：東橫大手町」", map:"東橫大手町" },
+    { name:"Belken Hotel Kanda", city:"東京", nights:"12/21 – 12/24・3 晚", color:"#A8D3E6",
+      checkin:"12月21日（全日）", checkout:"12月24日（全日活動結束日）", addr:"行事曆未寫", access:"行事曆未寫",
+      memo:"12月23日晚間已有酷航回程", map:"Belken Hotel Kanda" }
+  ],
+  lists: {
+    todo: [
+      { text:"12月18日至20日 住宿未填", note:"行事曆未填" },
+      { text:"Belken Hotel Kanda 退房日為 12月24日，但 12月23日 18:55 已有酷航回程", note:"行事曆未填" },
+      { text:"酷航去程未寫航班代號與抵達機場", note:"行事曆未填" },
+      { text:"酷航回程未寫航班代號與抵達地", note:"行事曆未填" }
+    ],
+    prep: [],
+    pack: []
+  }
+},
+{
+  id: "hokkaido-ski",
+  label: "北海道滑雪",
+  hero: "tokyo",
+  title: "北海道滑雪",
+  subtitle: "1 月行程",
+  dates: "2027.01.22 – 01.31",
+  start: "2027-01-22T19:00:00+08:00",
+  end:   "2027-01-31T20:00:00+08:00",
+  flights: [],
+  days: [
+    { date:"1/22", week:"週五", title:"北海道滑雪", area:"行事曆未寫地點", art:"ski", items:[
+      { t:"19:00", title:"北海道滑雪", note:"主日曆時段自 19:00 起；ETING 日曆為全日（至 2月1日結束）。" }
+    ]},
+    { date:"1/23", week:"週六", title:"北海道滑雪", area:"行事曆未寫地點", art:"ski", items:[
+      { t:"全日", title:"北海道滑雪", note:"ETING 日曆全日；主日曆為跨日時段事件中。" }
+    ]},
+    { date:"1/24", week:"週日", title:"北海道滑雪", area:"行事曆未寫地點", art:"snowman", items:[
+      { t:"全日", title:"北海道滑雪", note:"ETING 日曆全日；主日曆為跨日時段事件中。" }
+    ]},
+    { date:"1/25", week:"週一", title:"北海道滑雪", area:"行事曆未寫地點", art:"ski", items:[
+      { t:"全日", title:"北海道滑雪", note:"ETING 日曆全日；主日曆為跨日時段事件中。" }
+    ]},
+    { date:"1/26", week:"週二", title:"北海道滑雪", area:"行事曆未寫地點", art:"snowman", items:[
+      { t:"全日", title:"北海道滑雪", note:"ETING 日曆全日；主日曆為跨日時段事件中。" }
+    ]},
+    { date:"1/27", week:"週三", title:"北海道滑雪", area:"行事曆未寫地點", art:"ski", items:[
+      { t:"全日", title:"北海道滑雪", note:"ETING 日曆全日；主日曆為跨日時段事件中。" }
+    ]},
+    { date:"1/28", week:"週四", title:"北海道滑雪", area:"行事曆未寫地點", art:"fuji", items:[
+      { t:"全日", title:"北海道滑雪", note:"ETING 日曆全日；主日曆為跨日時段事件中。" }
+    ]},
+    { date:"1/29", week:"週五", title:"北海道滑雪", area:"行事曆未寫地點", art:"ski", items:[
+      { t:"全日", title:"北海道滑雪", note:"ETING 日曆全日；主日曆為跨日時段事件中。" }
+    ]},
+    { date:"1/30", week:"週六", title:"北海道滑雪", area:"行事曆未寫地點", art:"snowman", items:[
+      { t:"全日", title:"北海道滑雪", note:"ETING 日曆全日；主日曆為跨日時段事件中。" }
+    ]},
+    { date:"1/31", week:"週日", title:"北海道滑雪", area:"行事曆未寫地點", art:"ski", items:[
+      { t:"至20:00", title:"北海道滑雪", note:"主日曆時段至 20:00；ETING 日曆全日最後一天。" }
+    ]}
+  ],
+  stays: [],
+  lists: {
+    todo: [
+      { text:"這趟行事曆沒有航班", note:"行事曆未填" },
+      { text:"這趟行事曆沒有住宿", note:"行事曆未填" }
+    ],
+    prep: [],
+    pack: []
+  }
+},
+{
+  id: "tokyo-ski",
+  label: "東京滑雪",
+  hero: "tokyo",
+  title: "東京滑雪",
+  subtitle: "2 月行程",
+  dates: "2027.02.08 – 02.17",
+  start: "2027-02-08T16:50:00+08:00",
+  end:   "2027-02-17T13:35:00+08:00",
+  flights: [
+    { dir:"去程", airline:"ANA", no:"", date:"2/08（一）",
+      from:{code:"松山", city:"松山", time:"16:50"}, to:{code:"羽田", city:"羽田", time:"20:40"},
+      dur:"行事曆未寫", term:"行事曆未寫", bag:"行事曆未寫" },
+    { dir:"回程", airline:"ANA", no:"", date:"2/17（三）",
+      from:{code:"羽田", city:"羽田", time:"12:00"}, to:{code:"札幌", city:"札幌", time:"13:35"},
+      dur:"行事曆未寫", term:"行事曆未寫", bag:"行事曆未寫" }
+  ],
+  days: [
+    { date:"2/08", week:"週一", title:"ANA 松山飛羽田", area:"松山 → 羽田", art:"plane", items:[
+      { t:"16:50", title:"ANA 松山飛羽田", note:"16:50–20:40（台北時間）。行事曆未寫航班代號。", move:["plane"] }
+    ]},
+    { date:"2/09", week:"週二", title:"東京滑雪", area:"行事曆未寫地點", art:"ski", items:[
+      { t:"19:00", title:"東京滑雪", note:"主日曆時段自 19:00 起；ETING 日曆為全日（2/9–2/15）。" }
+    ]},
+    { date:"2/10", week:"週三", title:"東京滑雪", area:"行事曆未寫地點", art:"ski", items:[
+      { t:"全日", title:"東京滑雪", note:"ETING 日曆全日；主日曆為跨日時段事件中。" }
+    ]},
+    { date:"2/11", week:"週四", title:"東京滑雪", area:"行事曆未寫地點", art:"snowman", items:[
+      { t:"全日", title:"東京滑雪", note:"ETING 日曆全日；主日曆為跨日時段事件中。" }
+    ]},
+    { date:"2/12", week:"週五", title:"東京滑雪", area:"行事曆未寫地點", art:"ski", items:[
+      { t:"全日", title:"東京滑雪", note:"ETING 日曆全日；主日曆為跨日時段事件中。" }
+    ]},
+    { date:"2/13", week:"週六", title:"東京滑雪", area:"行事曆未寫地點", art:"fuji", items:[
+      { t:"全日", title:"東京滑雪", note:"ETING 日曆全日；主日曆為跨日時段事件中。" }
+    ]},
+    { date:"2/14", week:"週日", title:"東京滑雪", area:"行事曆未寫地點", art:"snowman", items:[
+      { t:"全日", title:"東京滑雪", note:"ETING 日曆全日；主日曆為跨日時段事件中。" }
+    ]},
+    { date:"2/15", week:"週一", title:"東京滑雪", area:"行事曆未寫地點", art:"ski", items:[
+      { t:"至20:00", title:"東京滑雪", note:"主日曆時段至 20:00；ETING 日曆全日最後一天（至 2月16日結束）。" }
+    ]},
+    { date:"2/16", week:"週二", title:"行事曆尚無行程", area:"", art:"", items:[]},
+    { date:"2/17", week:"週三", title:"ANA 羽田飛札幌", area:"羽田 → 札幌", art:"plane", items:[
+      { t:"12:00", title:"ANA_羽田飛札幌", note:"12:00–13:35（台北時間）。行事曆未寫航班代號。此班在滑雪區塊結束兩天後。", move:["plane"] }
+    ]}
+  ],
+  stays: [],
+  lists: {
+    todo: [
+      { text:"這趟行事曆沒有住宿", note:"行事曆未填" },
+      { text:"2月16日 行事曆尚無行程", note:"行事曆未填" },
+      { text:"ANA 松山飛羽田 未寫航班代號", note:"行事曆未填" },
+      { text:"ANA 羽田飛札幌 未寫航班代號", note:"行事曆未填" }
+    ],
+    prep: [],
+    pack: []
+  }
+},
+{
+  id: "ama-hokkaido",
+  label: "阿馬的北海道",
+  hero: "tokyo",
+  title: "阿馬的北海道",
+  subtitle: "2 月至 3 月",
+  dates: "2027.02.20 – 03.01",
+  start: "2027-02-20T00:00:00+08:00",
+  end:   "2027-03-01T23:59:00+08:00",
+  flights: [
+    { dir:"回程", airline:"星宇", no:"", date:"2/28（日）",
+      from:{code:"札幌", city:"札幌", time:"10:00"}, to:{code:"台中", city:"台中", time:"11:00"},
+      dur:"行事曆紀錄為 10:00–11:00", term:"行事曆未寫", bag:"行事曆未寫" }
+  ],
+  days: [
+    { date:"2/20", week:"週六", title:"入住 Dormy inn 小樽", area:"小樽", art:"fuji", items:[
+      { t:"住宿", title:"入住 Dormy inn 小樽", note:"天然溫泉 燈之湯 多美迎PREMIUM小樽。退房日 2月25日。" }
+    ]},
+    { date:"2/21", week:"週日", title:"Dormy inn 小樽", area:"小樽", art:"snowman", items:[
+      { t:"住宿", title:"Dormy inn 小樽", note:"續住，退房日 2月25日" }
+    ]},
+    { date:"2/22", week:"週一", title:"Dormy inn 小樽", area:"小樽", art:"fuji", items:[
+      { t:"住宿", title:"Dormy inn 小樽", note:"續住，退房日 2月25日" }
+    ]},
+    { date:"2/23", week:"週二", title:"Dormy inn 小樽", area:"小樽", art:"snowman", items:[
+      { t:"住宿", title:"Dormy inn 小樽", note:"續住，退房日 2月25日" }
+    ]},
+    { date:"2/24", week:"週三", title:"兩筆住宿重疊", area:"小樽", art:"fuji", items:[
+      { t:"住宿", title:"Dormy inn 小樽", note:"續住，退房日 2月25日" },
+      { t:"住宿", title:"入住 omo5 小樽", note:"OMO5 小樽 by 星野集團。退房日 3月1日。" }
+    ]},
+    { date:"2/25", week:"週四", title:"Dormy inn 退房、omo5 續住", area:"小樽", art:"", items:[
+      { t:"退房", title:"Dormy inn 小樽 退房", note:"全日活動的退房日為 2月25日" },
+      { t:"住宿", title:"omo5 小樽", note:"續住，退房日 3月1日" }
+    ]},
+    { date:"2/26", week:"週五", title:"omo5 小樽", area:"小樽", art:"", items:[
+      { t:"住宿", title:"omo5 小樽", note:"續住，退房日 3月1日" }
+    ]},
+    { date:"2/27", week:"週六", title:"omo5 小樽", area:"小樽", art:"", items:[
+      { t:"住宿", title:"omo5 小樽", note:"續住，退房日 3月1日" }
+    ]},
+    { date:"2/28", week:"週日", title:"星宇札幌回台中", area:"札幌 → 台中・omo5 小樽", art:"plane", items:[
+      { t:"10:00", title:"星宇札幌回台中", note:"10:00–11:00（台北時間）。行事曆未寫航班代號。", move:["plane"] },
+      { t:"住宿", title:"omo5 小樽", note:"續住，退房日 3月1日" }
+    ]},
+    { date:"3/01", week:"週一", title:"omo5 小樽退房", area:"小樽", art:"", items:[
+      { t:"退房", title:"omo5 小樽 退房", note:"全日活動的退房日為 3月1日。主日曆「阿馬的北海道」區塊也在這天結束。" }
+    ]}
+  ],
+  stays: [
+    { name:"Dormy inn 小樽", city:"小樽", nights:"2/20 – 2/25・5 晚", color:"#F2A497",
+      checkin:"2月20日（全日）", checkout:"2月25日（全日活動結束日）",
+      addr:"天然溫泉 燈之湯 多美迎PREMIUM小樽, 3-chōme-9-1 Inaho, Otaru, Hokkaido 047-0032日本",
+      access:"行事曆未寫", memo:"行事曆標題為「宿：Dormy inn 小樽」",
+      map:"天然溫泉 燈之湯 多美迎PREMIUM小樽, 3-chōme-9-1 Inaho, Otaru, Hokkaido 047-0032日本" },
+    { name:"omo5 小樽", city:"小樽", nights:"2/24 – 3/01・5 晚", color:"#A8D3E6",
+      checkin:"2月24日（全日）", checkout:"3月1日（全日活動結束日）",
+      addr:"OMO5 小樽 by 星野集團, 1-chōme-6-31 Ironai, Otaru, Hokkaido 047-0031日本",
+      access:"行事曆未寫", memo:"與 Dormy inn 在 2月24日重疊一晚",
+      map:"OMO5 小樽 by 星野集團, 1-chōme-6-31 Ironai, Otaru, Hokkaido 047-0031日本" }
+  ],
+  lists: {
+    todo: [
+      { text:"Dormy inn 小樽退房 2月25日，omo5 小樽入住 2月24日，兩筆重疊一晚", note:"行事曆未填" },
+      { text:"這趟行事曆沒有去程航班", note:"行事曆未填" },
+      { text:"星宇札幌回台中 未寫航班代號，紀錄時段為 10:00–11:00", note:"行事曆未填" }
+    ],
+    prep: [],
+    pack: []
+  }
+},
+{
+  id: "osaka",
+  label: "大阪",
+  hero: "kansai",
+  title: "大阪",
+  subtitle: "4 月行程",
+  dates: "2027.04.01 – 04.06",
+  start: "2027-04-01T16:00:00+08:00",
+  end:   "2027-04-06T23:05:00+08:00",
+  flights: [
+    { dir:"回程", airline:"Air Asia", no:"D7379", date:"4/06（二）",
+      from:{code:"關西", city:"關西國際機場", time:"20:55"}, to:{code:"—", city:"行事曆未寫", time:"23:05"},
+      dur:"行事曆未寫", term:"T1", bag:"行事曆未寫" }
+  ],
+  days: [
+    { date:"4/01", week:"週四", title:"入住神戶三宮", area:"Comfort Hotel ERA Kobe Sannomiya", art:"", items:[
+      { t:"16:00", title:"入住 Comfort Hotel ERA Kobe Sannomiya", note:"16:00 入住，翌日 11:00 退房。4-chōme-2-10 Kumoidōri, Chuo Ward, Kobe, Hyogo 651-0096日本" }
+    ]},
+    { date:"4/02", week:"週五", title:"神戶三宮退房", area:"神戶", art:"", items:[
+      { t:"11:00", title:"Comfort Hotel ERA Kobe Sannomiya 退房", note:"11:00 退房。下一筆住宿是 4月4日 16:00 京都堀川五条。" }
+    ]},
+    { date:"4/03", week:"週六", title:"行事曆尚無行程", area:"", art:"", items:[]},
+    { date:"4/04", week:"週日", title:"入住京都堀川五条", area:"Comfort Hotel Kyoto Horikawagojo", art:"", items:[
+      { t:"16:00", title:"入住 Comfort Hotel Kyoto Horikawagojo", note:"16:00 入住，翌日 10:00 退房。134-32 Sensuichō, Shimogyo Ward, Kyoto, 600-8338日本" }
+    ]},
+    { date:"4/05", week:"週一", title:"京都退房、入住大阪心齋橋", area:"京都 → 大阪", art:"", items:[
+      { t:"10:00", title:"Comfort Hotel Kyoto Horikawagojo 退房", note:"10:00 退房" },
+      { t:"16:00", title:"入住 Comfort Hotel Osaka Shinsaibashi", note:"16:00 入住，翌日 11:00 退房。Osaka, Chuo Ward, Higashishinsaibashi, 1-chōme−15−15 いちご心斎橋ビル" }
+    ]},
+    { date:"4/06", week:"週二", title:"退房與回程", area:"大阪心齋橋・關西機場", art:"plane", items:[
+      { t:"11:00", title:"Comfort Hotel Osaka Shinsaibashi 退房", note:"11:00 退房" },
+      { t:"20:55", title:"Air Asia(T1:D7379)", note:"20:55–23:05（台北時間）。關西國際機場。行事曆未寫抵達地。", move:["plane"] }
+    ]}
+  ],
+  stays: [
+    { name:"Comfort Hotel ERA Kobe Sannomiya", city:"神戶", nights:"4/01 – 4/02・1 晚", color:"#F2A497",
+      checkin:"16:00", checkout:"11:00",
+      addr:"4-chōme-2-10 Kumoidōri, Chuo Ward, Kobe, Hyogo 651-0096日本",
+      access:"行事曆未寫", memo:"行事曆有寫入住與退房時刻",
+      map:"Comfort Hotel ERA Kobe Sannomiya, 4-chōme-2-10 Kumoidōri, Chuo Ward, Kobe, Hyogo 651-0096日本" },
+    { name:"Comfort Hotel Kyoto Horikawagojo", city:"京都", nights:"4/04 – 4/05・1 晚", color:"#A8D3E6",
+      checkin:"16:00", checkout:"10:00",
+      addr:"134-32 Sensuichō, Shimogyo Ward, Kyoto, 600-8338日本",
+      access:"行事曆未寫", memo:"行事曆有寫入住與退房時刻",
+      map:"Comfort Hotel Kyoto Horikawagojo, 134-32 Sensuichō, Shimogyo Ward, Kyoto, 600-8338日本" },
+    { name:"Comfort Hotel Osaka Shinsaibashi", city:"大阪", nights:"4/05 – 4/06・1 晚", color:"#B9DAA5",
+      checkin:"16:00", checkout:"11:00",
+      addr:"日本〒542-0083 Osaka, Chuo Ward, Higashishinsaibashi, 1-chōme−15−15 いちご心斎橋ビル",
+      access:"行事曆未寫", memo:"行事曆有寫入住與退房時刻",
+      map:"Comfort Hotel Osaka Shinsaibashi, Osaka, Chuo Ward, Higashishinsaibashi, 1-chōme−15−15 いちご心斎橋ビル" }
+  ],
+  lists: {
+    todo: [
+      { text:"4月2日退房後至 4月4日入住前，行事曆沒有住宿", note:"行事曆未填" },
+      { text:"這趟行事曆沒有去程航班", note:"行事曆未填" },
+      { text:"Air Asia D7379 未寫抵達地", note:"行事曆未填" }
+    ],
+    prep: [],
+    pack: []
+  }
+}
+];
 
-function ymd(d){const z=new Date(d+"T12:00:00+08:00");return d}
-function fmtMD(iso){const [y,m,d]=iso.split("-");return Number(m)+"月"+Number(d)+"日"}
-function fmtFull(iso){const dt=new Date(iso+"T12:00:00+08:00");return fmtMD(iso)+"（"+WEEK[dt.getDay()]+"）"}
-function daysBetween(fromIso,toIso){
-  const a=new Date(fromIso+"T00:00:00+08:00");
-  const b=new Date(toIso+"T00:00:00+08:00");
-  return Math.round((b-a)/86400000);
-}
-function todayIso(){
-  return new Date().toLocaleDateString("en-CA",{timeZone:TZ});
-}
-function rangeDays(start,end){
-  const out=[];let cur=start;
-  while(cur<=end){out.push(cur);const dt=new Date(cur+"T12:00:00+08:00");dt.setDate(dt.getDate()+1);
-    cur=dt.toLocaleDateString("en-CA",{timeZone:TZ})}
-  return out;
-}
-function hhmm(t){return t?t.slice(0,5):""}
+/* ========================================================= */
+const INK = "#3E3A39", WHITE = "#FFFFFF";
+const C = { coral:"#F2A497", yellow:"#F6D27A", mizu:"#A8D3E6", green:"#B9DAA5", paper:"#FFFCF6" };
+const S = `stroke="${INK}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"`;
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const esc = s => String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const replay = (el, cls) => { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); };
 
-const ILLU={
-tokyo:`<svg viewBox="0 0 360 220" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-  <rect x="18" y="16" width="324" height="188" rx="36" fill="#A8D3E6" stroke="#3E3A39" stroke-width="3"/>
-  <circle class="bob2" cx="78" cy="58" r="22" fill="#F6D27A" stroke="#3E3A39" stroke-width="3"/>
-  <path d="M18 150h324" stroke="#3E3A39" stroke-width="3"/>
-  <rect x="18" y="150" width="324" height="54" rx="0" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3"/>
-  <g class="sway">
-    <path d="M180 46l14 18h-28z" fill="#3E3A39"/>
-    <rect x="174" y="62" width="12" height="14" fill="#F2A497" stroke="#3E3A39" stroke-width="3"/>
-    <path d="M132 186L180 76l48 110z" fill="#F2A497" stroke="#3E3A39" stroke-width="3"/>
-    <rect x="168" y="118" width="24" height="10" fill="#F6D27A" stroke="#3E3A39" stroke-width="2.5"/>
-    <rect x="172" y="142" width="16" height="10" fill="#F6D27A" stroke="#3E3A39" stroke-width="2.5"/>
-    <rect x="176" y="96" width="8" height="8" fill="#3E3A39"/>
-  </g>
-  <g class="chug">
-    <rect x="40" y="158" width="86" height="34" rx="8" fill="#FFFCF6" stroke="#3E3A39" stroke-width="3"/>
-    <rect x="126" y="158" width="70" height="34" rx="8" fill="#F6D27A" stroke="#3E3A39" stroke-width="3"/>
-    <circle cx="62" cy="196" r="8" fill="#3E3A39"/><circle cx="108" cy="196" r="8" fill="#3E3A39"/>
-    <circle cx="146" cy="196" r="8" fill="#3E3A39"/><circle cx="180" cy="196" r="8" fill="#3E3A39"/>
-    <rect x="50" y="166" width="18" height="12" rx="3" fill="#A8D3E6" stroke="#3E3A39" stroke-width="2"/>
-    <rect x="74" y="166" width="18" height="12" rx="3" fill="#A8D3E6" stroke="#3E3A39" stroke-width="2"/>
-  </g>
-  <circle cx="292" cy="78" r="10" fill="#FFFCF6" stroke="#3E3A39" stroke-width="3"/>
-  <circle cx="318" cy="58" r="7" fill="#FFFCF6" stroke="#3E3A39" stroke-width="3"/>
-</svg>`,
-ski:`<svg viewBox="0 0 360 220" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-  <rect x="18" y="16" width="324" height="188" rx="36" fill="#A8D3E6" stroke="#3E3A39" stroke-width="3"/>
-  <circle class="bob2" cx="80" cy="54" r="20" fill="#F6D27A" stroke="#3E3A39" stroke-width="3"/>
-  <g class="bob">
-    <path d="M40 186L130 70l70 70 20-28 90 74H40z" fill="#FFFCF6" stroke="#3E3A39" stroke-width="3"/>
-    <path d="M130 70l18 28-30 8z" fill="#FFFCF6" stroke="#3E3A39" stroke-width="3"/>
-  </g>
-  <g class="sway">
-    <circle cx="236" cy="118" r="10" fill="#F2A497" stroke="#3E3A39" stroke-width="3"/>
-    <path d="M236 128v22" stroke="#3E3A39" stroke-width="3" stroke-linecap="round"/>
-    <path d="M224 142h24" stroke="#3E3A39" stroke-width="3" stroke-linecap="round"/>
-    <path d="M214 162l44 6M218 170l40-8" stroke="#3E3A39" stroke-width="3" stroke-linecap="round"/>
-    <path d="M228 136l-14 10M244 136l14 8" stroke="#3E3A39" stroke-width="3" stroke-linecap="round"/>
-  </g>
-  <circle class="flake" cx="60" cy="90" r="3" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2"/>
-  <circle class="flake" cx="300" cy="70" r="3" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2" style="animation-delay:.8s"/>
-  <circle class="flake" cx="320" cy="110" r="2.5" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2" style="animation-delay:1.6s"/>
-  <circle class="flake" cx="100" cy="50" r="2.5" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2" style="animation-delay:2.2s"/>
-</svg>`,
-tokyoski:`<svg viewBox="0 0 360 220" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-  <rect x="18" y="16" width="324" height="188" rx="36" fill="#A8D3E6" stroke="#3E3A39" stroke-width="3"/>
-  <circle class="bob2" cx="300" cy="52" r="18" fill="#F6D27A" stroke="#3E3A39" stroke-width="3"/>
-  <g class="bob">
-    <path d="M28 186L120 78l50 58 30-40 122 90H28z" fill="#FFFCF6" stroke="#3E3A39" stroke-width="3"/>
-  </g>
-  <g class="sway">
-    <path d="M86 70l8 10h-16z" fill="#3E3A39"/>
-    <path d="M62 186L86 86l24 100z" fill="#F2A497" stroke="#3E3A39" stroke-width="3"/>
-    <rect x="80" y="120" width="12" height="7" fill="#F6D27A" stroke="#3E3A39" stroke-width="2"/>
-  </g>
-  <g class="sway" style="animation-delay:.5s">
-    <circle cx="230" cy="124" r="9" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3"/>
-    <path d="M230 133v18M218 164l28 4M222 170l24-6M220 144h20" stroke="#3E3A39" stroke-width="3" stroke-linecap="round"/>
-  </g>
-  <circle class="flake" cx="160" cy="60" r="3" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2"/>
-  <circle class="flake" cx="270" cy="80" r="2.5" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2" style="animation-delay:1s"/>
-</svg>`,
-otaru:`<svg viewBox="0 0 360 220" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-  <rect x="18" y="16" width="324" height="188" rx="36" fill="#A8D3E6" stroke="#3E3A39" stroke-width="3"/>
-  <circle class="bob2" cx="64" cy="50" r="16" fill="#F6D27A" stroke="#3E3A39" stroke-width="3"/>
-  <path d="M18 150h324" stroke="#3E3A39" stroke-width="3"/>
-  <rect x="18" y="150" width="324" height="54" fill="#7FB7CE" stroke="#3E3A39" stroke-width="3"/>
-  <path d="M40 168h280M50 180h260" stroke="#FFFCF6" stroke-width="2" opacity=".8"/>
-  <g class="bob">
-    <rect x="48" y="86" width="70" height="64" fill="#F2A497" stroke="#3E3A39" stroke-width="3"/>
-    <rect x="56" y="96" width="16" height="16" fill="#F6D27A" stroke="#3E3A39" stroke-width="2"/>
-    <rect x="80" y="96" width="16" height="16" fill="#F6D27A" stroke="#3E3A39" stroke-width="2"/>
-    <rect x="68" y="120" width="16" height="20" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2"/>
-    <rect x="126" y="74" width="86" height="76" fill="#FFFCF6" stroke="#3E3A39" stroke-width="3"/>
-    <rect x="138" y="86" width="18" height="16" fill="#A8D3E6" stroke="#3E3A39" stroke-width="2"/>
-    <rect x="164" y="86" width="18" height="16" fill="#A8D3E6" stroke="#3E3A39" stroke-width="2"/>
-    <rect x="138" y="110" width="18" height="16" fill="#A8D3E6" stroke="#3E3A39" stroke-width="2"/>
-    <rect x="164" y="110" width="18" height="16" fill="#A8D3E6" stroke="#3E3A39" stroke-width="2"/>
-    <path d="M126 74h86l-8-16h-70z" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3"/>
-    <rect x="226" y="92" width="70" height="58" fill="#F6D27A" stroke="#3E3A39" stroke-width="3"/>
-    <rect x="238" y="104" width="16" height="14" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2"/>
-    <rect x="264" y="104" width="16" height="14" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2"/>
-  </g>
-  <path d="M170 150c8 8 20 8 28 0" stroke="#3E3A39" stroke-width="3" fill="none"/>
-  <circle class="flake" cx="100" cy="48" r="3" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2"/>
-  <circle class="flake" cx="300" cy="60" r="3" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2" style="animation-delay:1.2s"/>
-  <circle class="flake" cx="250" cy="40" r="2.5" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2" style="animation-delay:2s"/>
-</svg>`,
-osaka:`<svg viewBox="0 0 360 220" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-  <rect x="18" y="16" width="324" height="188" rx="36" fill="#A8D3E6" stroke="#3E3A39" stroke-width="3"/>
-  <circle class="bob2" cx="70" cy="56" r="20" fill="#F6D27A" stroke="#3E3A39" stroke-width="3"/>
-  <ellipse cx="180" cy="186" rx="130" ry="16" fill="#7FB7CE" stroke="#3E3A39" stroke-width="3"/>
-  <g class="bob">
-    <rect x="92" y="150" width="176" height="28" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3"/>
-    <rect x="108" y="126" width="144" height="28" fill="#F2A497" stroke="#3E3A39" stroke-width="3"/>
-    <path d="M108 126h144l-16-22H124z" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3"/>
-    <rect x="128" y="86" width="104" height="22" fill="#F2A497" stroke="#3E3A39" stroke-width="3"/>
-    <path d="M128 86h104l-18-20H146z" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3"/>
-    <rect x="150" y="50" width="60" height="20" fill="#F6D27A" stroke="#3E3A39" stroke-width="3"/>
-    <path d="M150 50h60l-12-16H162z" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3"/>
-    <rect x="174" y="28" width="12" height="10" fill="#3E3A39"/>
-    <rect x="140" y="134" width="16" height="12" fill="#F6D27A" stroke="#3E3A39" stroke-width="2"/>
-    <rect x="204" y="134" width="16" height="12" fill="#F6D27A" stroke="#3E3A39" stroke-width="2"/>
-    <rect x="172" y="132" width="16" height="18" fill="#FFFCF6" stroke="#3E3A39" stroke-width="2"/>
-  </g>
-  <rect x="40" y="158" width="28" height="22" rx="4" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3"/>
-  <rect x="292" y="152" width="24" height="28" rx="4" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3"/>
-</svg>`
+/* ---------- 插圖零件 ---------- */
+const cloud = (x,y,s,cls) => `<g transform="translate(${x} ${y}) scale(${s})"><g class="a ${cls}"><path d="M0 30 H78 A13 13 0 0 0 66 10 A17 17 0 0 0 36 4 A15 15 0 0 0 10 14 A11 11 0 0 0 0 30Z" fill="${WHITE}" ${S}/></g></g>`;
+
+const torii = (x,y,s) => `<g transform="translate(${x} ${y}) scale(${s})">
+  <rect x="7" y="10" width="6" height="40" rx="1.5" fill="${C.coral}" ${S}/>
+  <rect x="37" y="10" width="6" height="40" rx="1.5" fill="${C.coral}" ${S}/>
+  <rect x="2" y="16" width="46" height="6" rx="2" fill="${C.coral}" ${S}/>
+  <path d="M-4 4 Q25 -2 54 4 L52 11 Q25 6 -2 11Z" fill="${C.coral}" ${S}/>
+  <rect x="22" y="10" width="6" height="6" fill="${C.coral}" ${S}/>
+</g>`;
+
+function pagoda(cx, base){
+  const r = i => base - 20 - i*24;
+  let bodies = "", roofs = "";
+  for (let i=0;i<5;i++){
+    const w = 86 - i*12, bw = Math.round(w*0.44);
+    const top = r(i), bottom = i===0 ? base : r(i-1)-10;
+    bodies += `<rect x="${cx-bw/2}" y="${top}" width="${bw}" height="${bottom-top}" fill="${C.paper}" ${S}/>`;
+    bodies += `<rect x="${cx-4}" y="${top+4}" width="8" height="${Math.max(bottom-top-6,4)}" rx="2" fill="${C.mizu}" stroke="${INK}" stroke-width="2" vector-effect="non-scaling-stroke"/>`;
+    roofs += `<path d="M${cx-w/2} ${top} Q${cx-w/2+8} ${top-3} ${cx-w/2+12} ${top-11} H${cx+w/2-12} Q${cx+w/2-8} ${top-3} ${cx+w/2} ${top}Z" fill="${C.coral}" ${S}/>`;
+  }
+  const t = r(4)-11;
+  const spire = `<line x1="${cx}" y1="${t}" x2="${cx}" y2="${t-30}" ${S}/>` +
+    [6,13,20].map(d=>`<circle cx="${cx}" cy="${t-d}" r="4" fill="${C.yellow}" ${S}/>`).join("");
+  return `<g>${spire}${bodies}${roofs}</g>`;
+}
+
+// 東京鐵塔：原點在底部中央，往上畫
+const tower = `
+  <line x1="0" y1="-134" x2="0" y2="-164" ${S}/>
+  <circle cx="0" cy="-166" r="3.5" fill="${C.yellow}" ${S}/>
+  <path d="M-25 0 Q-9 -48 -5 -134 H5 Q9 -48 25 0Z" fill="${C.coral}" ${S}/>
+  <path d="M-14 0 Q0 -30 14 0Z" fill="${WHITE}" ${S}/>
+  <rect x="-13" y="-46" width="26" height="6" fill="${WHITE}" ${S}/>
+  <rect x="-17" y="-84" width="34" height="13" rx="3" fill="${WHITE}" ${S}/>
+  <rect x="-9" y="-120" width="18" height="9" rx="3" fill="${WHITE}" ${S}/>`;
+
+// 雪人：原點在底部中央
+const snowman = `
+  <line x1="-10" y1="-34" x2="-24" y2="-44" ${S}/><line x1="10" y1="-34" x2="24" y2="-46" ${S}/>
+  <circle cx="0" cy="-17" r="17" fill="${WHITE}" ${S}/>
+  <circle cx="0" cy="-43" r="12" fill="${WHITE}" ${S}/>
+  <path d="M-11 -34 Q0 -29 11 -34 L12 -29 Q0 -24 -12 -29Z" fill="${C.coral}" ${S}/>
+  <path d="M7 -30 L11 -20 L4 -28Z" fill="${C.coral}" ${S}/>
+  <path d="M-12 -49 Q-12 -62 0 -62 Q12 -62 12 -49Z" fill="${C.yellow}" ${S}/>
+  <circle cx="0" cy="-64" r="3.5" fill="${C.yellow}" ${S}/>
+  <circle cx="-4" cy="-44" r="1.8" fill="${INK}"/><circle cx="4" cy="-44" r="1.8" fill="${INK}"/>
+  <path d="M-1 -41 L6 -40 L-1 -38Z" fill="${C.coral}" stroke="${INK}" stroke-width="1.5"/>
+  <circle cx="0" cy="-18" r="2" fill="${INK}"/><circle cx="0" cy="-10" r="2" fill="${INK}"/>`;
+
+const pine = (x,y,s=1) => `<g transform="translate(${x} ${y}) scale(${s})"><rect x="-2.5" y="-6" width="5" height="8" fill="${C.paper}" ${S}/><path d="M0 -34 L12 -16 H6 L14 -6 H-14 L-6 -16 H-12Z" fill="${C.green}" ${S}/></g>`;
+
+const fujiShape = (x,y,s) => `<g transform="translate(${x} ${y}) scale(${s})">
+  <path d="M0 0 L86 -122 Q96 -130 106 -122 L192 0Z" fill="${C.mizu}" ${S}/>
+  <path d="M64 -91 L86 -122 Q96 -130 106 -122 L128 -91 Q120 -97 114 -89 Q106 -99 98 -89 Q90 -99 82 -89 Q74 -97 64 -91Z" fill="${WHITE}" ${S}/></g>`;
+
+function train(x, y, body, stripe, nose){
+  return `<g transform="translate(${x} ${y})"><g class="a a-bob">
+    <path d="M0 38 V10 Q0 2 10 2 H128 Q160 4 178 38Z" fill="${body}" ${S}/>
+    <path d="M4 28 H168" stroke="${stripe}" stroke-width="5"/>
+    ${[16,40,64,88,112].map(x=>`<rect x="${x}" y="9" width="17" height="12" rx="4" fill="${WHITE}" stroke="${INK}" stroke-width="2.5"/>`).join("")}
+    <path d="M138 9 Q154 11 162 22 H138Z" fill="${nose}" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/>
+    ${[22,52,110,140].map(x=>`<circle cx="${x}" cy="40" r="5" fill="${C.paper}" stroke="${INK}" stroke-width="2.5"/>`).join("")}
+  </g></g>`;
+}
+const flakes = pts => pts.map(([x,y,d])=>`<circle class="a a-snow" style="animation-delay:${d}s" cx="${x}" cy="${y}" r="3.5" fill="${WHITE}" stroke="${INK}" stroke-width="2"/>`).join("");
+const track = `<rect x="-10" y="206" width="380" height="50" fill="${C.paper}" ${S}/>
+  <g stroke="${INK}" stroke-width="3" stroke-linecap="round">${Array.from({length:19},(_,i)=>`<line x1="${i*20+2}" y1="236" x2="${i*20+12}" y2="236"/>`).join("")}</g>
+  <line x1="-10" y1="230" x2="370" y2="230" ${S}/>`;
+const sunFace = (x,y) => `<g transform="translate(${x} ${y})">
+  <g class="a a-spin">${[0,45,90,135,180,225,270,315].map(a=>`<line x1="0" y1="-27" x2="0" y2="-34" transform="rotate(${a})" ${S}/>`).join("")}</g>
+  <circle r="19" fill="${C.yellow}" ${S}/>
+  <circle cx="-6" cy="2" r="2" fill="${INK}"/><circle cx="6" cy="2" r="2" fill="${INK}"/>
+  <path d="M-4 8 Q0 11 4 8" fill="none" stroke="${INK}" stroke-width="2.2" stroke-linecap="round"/>
+  <ellipse cx="-11" cy="7" rx="3.5" ry="2" fill="${C.coral}"/><ellipse cx="11" cy="7" rx="3.5" ry="2" fill="${C.coral}"/></g>`;
+
+const HERO = {
+  kansai: { label:"插圖：五重塔、鳥居、遠山與行駛中的新幹線，天空飄著雲和小雪",
+    svg: () => `<svg viewBox="0 0 360 250" aria-hidden="true">
+    ${sunFace(306,48)}
+    ${cloud(22,34,0.9,"a-drift")}${cloud(150,18,0.7,"a-drift2")}
+    ${flakes([[30,40,0],[120,20,-2],[200,60,-4],[330,30,-1],[160,90,-3],[80,100,-5]])}
+    <path d="M-10 214 Q40 130 110 180 Q150 140 190 168 Q250 112 300 160 Q330 140 372 170 V250 H-10Z" fill="${C.green}" ${S}/>
+    ${torii(54,150,1.05)}
+    ${pagoda(262,206)}
+    ${track}
+    ${train(18,188,C.mizu,C.coral,WHITE)}
+  </svg>` },
+  tokyo: { label:"插圖：雪頂富士山、東京鐵塔、雪人和松樹，新幹線在雪地前行駛，天空飄著雪",
+    svg: () => `<svg viewBox="0 0 360 250" aria-hidden="true">
+    ${sunFace(44,46)}
+    ${cloud(196,22,0.75,"a-drift")}${cloud(92,60,0.55,"a-drift2")}
+    ${fujiShape(56,214,1)}
+    ${flakes([[20,90,0],[110,30,-1.5],[170,80,-3],[250,40,-4.5],[340,70,-2],[150,130,-5],[230,110,-1]])}
+    <path d="M-10 212 Q50 176 120 198 Q190 170 250 192 Q310 170 372 186 V250 H-10Z" fill="${WHITE}" ${S}/>
+    ${pine(22,200,0.9)}${pine(206,190,0.75)}${pine(346,192,0.8)}
+    <g transform="translate(300 208)">${tower}</g>
+    ${track}
+    <g transform="translate(244 210)"><g class="a a-float">${snowman}</g></g>
+    ${train(10,188,WHITE,C.mizu,C.mizu)}
+  </svg>` }
 };
 
-const PRE=[
-  "確認護照效期","下載或截圖機票與住宿","兌換日圓","通知銀行將出國",
-  "確認上網方式","檢查充電器與轉換插頭","準備常用藥"
-];
-const BAG=[
-  "護照與證件","錢包／信用卡／現金","手機與充電器","行動電源",
-  "轉換插頭","換洗衣物","盥洗用品","藥品","耳機"
-];
-const SKI=[
-  "滑雪外套","雪褲","保暖內層","滑雪手套","雪鏡","羊毛襪","暖暖包","護具（若有）"
-];
+const DAY_ART = {
+  plane: `<svg viewBox="0 0 120 84" aria-hidden="true">
+    ${cloud(30,50,0.8,"a-drift")}
+    <g class="a a-float">
+      <path d="M44 34 L30 16 H42 L58 32Z" fill="${C.coral}" ${S}/>
+      <path d="M14 40 Q14 30 28 30 H84 Q104 32 110 40 Q104 48 84 48 H28 Q14 48 14 40Z" fill="${WHITE}" ${S}/>
+      <path d="M16 30 L10 14 H20 L30 30Z" fill="${C.coral}" ${S}/>
+      ${[42,54,66,78].map(x=>`<circle cx="${x}" cy="38" r="3.2" fill="${C.mizu}" stroke="${INK}" stroke-width="2"/>`).join("")}
+      <path d="M52 46 L40 64 H54 L70 46Z" fill="${C.coral}" ${S}/>
+    </g></svg>`,
+  torii: `<svg viewBox="0 0 120 84" aria-hidden="true">
+    <path d="M0 76 Q60 66 120 76" fill="none" ${S}/>
+    ${torii(74,36,0.6)}${torii(42,26,0.85)}${torii(4,14,1.18)}
+    <g class="a a-float"><circle cx="104" cy="16" r="7" fill="${C.yellow}" ${S}/></g></svg>`,
+  bamboo: `<svg viewBox="0 0 120 84" aria-hidden="true">
+    ${[[18,0],[44,-1.2],[72,-0.6],[98,-2]].map(([x,d])=>`<g class="a a-sway" style="animation-delay:${d}s">
+      <rect x="${x}" y="4" width="11" height="78" rx="4" fill="${C.green}" ${S}/>
+      <line x1="${x}" y1="26" x2="${x+11}" y2="26" ${S}/><line x1="${x}" y1="50" x2="${x+11}" y2="50" ${S}/>
+      <path d="M${x+11} 26 Q${x+24} 18 ${x+28} 26 Q${x+20} 30 ${x+11} 26Z" fill="${C.green}" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/>
+    </g>`).join("")}</svg>`,
+  deer: `<svg viewBox="0 0 120 84" aria-hidden="true">
+    <path d="M4 78 H116" ${S}/>
+    <g stroke="${INK}" stroke-width="4" stroke-linecap="round"><line x1="40" y1="54" x2="38" y2="76"/><line x1="50" y1="56" x2="50" y2="76"/><line x1="70" y1="56" x2="70" y2="76"/><line x1="80" y1="54" x2="82" y2="76"/></g>
+    <ellipse cx="60" cy="48" rx="28" ry="14" fill="${C.yellow}" ${S}/>
+    ${[[48,44],[60,41],[70,46],[56,50]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2.6" fill="${WHITE}"/>`).join("")}
+    <path d="M32 44 L26 40" ${S}/>
+    <g class="a a-nod">
+      <path d="M80 44 L86 26" fill="none" stroke="${INK}" stroke-width="12" stroke-linecap="round"/>
+      <path d="M80 44 L86 26" fill="none" stroke="${C.yellow}" stroke-width="6" stroke-linecap="round"/>
+      <path d="M84 16 L80 6 M84 12 L76 10 M94 16 L98 6 M95 12 L103 10" ${S}/>
+      <ellipse cx="78" cy="22" rx="6" ry="3.5" fill="${C.yellow}" ${S}/>
+      <ellipse cx="102" cy="22" rx="6" ry="3.5" fill="${C.yellow}" ${S}/>
+      <circle cx="90" cy="26" r="11" fill="${C.yellow}" ${S}/>
+      <circle cx="86" cy="25" r="1.8" fill="${INK}"/><circle cx="95" cy="25" r="1.8" fill="${INK}"/>
+      <circle cx="90.5" cy="31" r="2.2" fill="${INK}"/>
+      <ellipse cx="83" cy="30" rx="2.6" ry="1.6" fill="${C.coral}"/><ellipse cx="98" cy="30" rx="2.6" ry="1.6" fill="${C.coral}"/>
+    </g>
+    <circle cx="16" cy="70" r="7" fill="#F1E3C6" ${S}/></svg>`,
+  castle: `<svg viewBox="0 0 120 84" aria-hidden="true">
+    <path d="M24 80 L32 60 H88 L96 80Z" fill="${C.paper}" ${S}/>
+    <path d="M30 70 H90 M44 60 L42 80 M60 60 V80 M76 60 L78 80" stroke="${INK}" stroke-width="2"/>
+    <rect x="38" y="44" width="44" height="16" fill="${WHITE}" ${S}/>
+    <path d="M30 46 Q60 38 90 46 L84 36 H36Z" fill="${C.green}" ${S}/>
+    <rect x="45" y="26" width="30" height="12" fill="${WHITE}" ${S}/>
+    <path d="M38 28 Q60 20 82 28 L76 18 H44Z" fill="${C.green}" ${S}/>
+    <path d="M48 18 Q60 6 72 18Z" fill="${C.green}" ${S}/>
+    <g class="a a-float"><path d="M46 12 l-4 -6 l5 2Z M74 12 l4 -6 l-5 2Z" fill="${C.yellow}" ${S}/></g>
+    ${[46,56,64,74].map(x=>`<rect x="${x-3}" y="48" width="6" height="7" rx="1" fill="${C.mizu}" stroke="${INK}" stroke-width="2"/>`).join("")}
+    <circle cx="60" cy="31" r="3" fill="${C.yellow}" stroke="${INK}" stroke-width="2"/></svg>`,
+  lantern: `<svg viewBox="0 0 120 84" aria-hidden="true">
+    <path d="M8 4 H112" ${S}/>
+    <g class="a a-swing">
+      <line x1="60" y1="4" x2="60" y2="11" ${S}/>
+      <rect x="38" y="11" width="44" height="7" rx="2" fill="${INK}" ${S}/>
+      <path d="M38 18 Q26 41 38 64 H82 Q94 41 82 18Z" fill="${C.coral}" ${S}/>
+      <path d="M33 30 Q60 34 87 30 M33 52 Q60 56 87 52" fill="none" stroke="${INK}" stroke-width="2"/>
+      <text x="60" y="47" text-anchor="middle" font-size="15" fill="${INK}" font-family="Huninn, sans-serif">雷門</text>
+      <rect x="38" y="64" width="44" height="7" rx="2" fill="${INK}" ${S}/>
+    </g>
+    ${pine(14,80,0.6)}${pine(106,80,0.6)}</svg>`,
+  ski: `<svg viewBox="0 0 120 84" aria-hidden="true">
+    <path d="M-4 84 L-4 76 L124 30 V84Z" fill="${WHITE}" ${S}/>
+    ${pine(96,38,0.55)}${pine(110,32,0.45)}
+    <g transform="translate(50 46) rotate(-20) scale(1.4)"><g class="a a-float">
+      <line x1="-22" y1="18" x2="26" y2="18" stroke="${INK}" stroke-width="4" stroke-linecap="round"/>
+      <path d="M26 18 Q31 17 31 13" fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>
+      <path d="M-4 16 L0 6 M8 16 L6 6" stroke="${INK}" stroke-width="5" stroke-linecap="round"/>
+      <path d="M-6 8 Q-8 -8 4 -10 Q14 -10 12 8Z" fill="${C.coral}" ${S}/>
+      <line x1="-6" y1="0" x2="-16" y2="16" ${S}/><line x1="12" y1="0" x2="22" y2="16" ${S}/>
+      <circle cx="4" cy="-17" r="7" fill="#FCE9D8" ${S}/>
+      <path d="M-3 -18 Q-3 -26 4 -26 Q11 -26 11 -18Z" fill="${C.yellow}" ${S}/>
+      <rect x="-1" y="-19" width="10" height="4" rx="2" fill="${C.mizu}" stroke="${INK}" stroke-width="2"/>
+    </g></g>
+    ${flakes([[20,14,0],[60,8,-2],[86,18,-4]])}</svg>`,
+  snowman: `<svg viewBox="0 0 120 84" aria-hidden="true">
+    <path d="M0 78 Q60 68 120 78" fill="none" ${S}/>
+    ${pine(22,76,0.75)}${pine(98,76,0.85)}
+    <g transform="translate(60 76) scale(0.95)"><g class="a a-float">${snowman}</g></g>
+    ${flakes([[16,14,0],[44,6,-2.5],[100,10,-4]])}</svg>`,
+  fuji: `<svg viewBox="0 0 120 84" aria-hidden="true">
+    ${fujiShape(14,78,0.48)}
+    <g transform="translate(88 80) scale(0.34) translate(-262 -206)">${pagoda(262,206)}</g>
+    <path d="M0 78 H120" ${S}/>
+    <g class="a a-drift">${cloud(8,10,0.32,"")}</g></svg>`,
+  dog: `<svg viewBox="0 0 120 84" aria-hidden="true">
+    <rect x="28" y="70" width="64" height="11" rx="3" fill="${C.paper}" ${S}/>
+    <path d="M78 58 Q92 52 88 40" fill="none" stroke="${INK}" stroke-width="7" stroke-linecap="round"/>
+    <path d="M78 58 Q92 52 88 40" fill="none" stroke="${C.yellow}" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M40 70 Q38 40 56 36 Q76 34 80 70Z" fill="${C.yellow}" ${S}/>
+    <rect x="48" y="54" width="7" height="16" rx="3" fill="${C.yellow}" ${S}/>
+    <rect x="61" y="54" width="7" height="16" rx="3" fill="${C.yellow}" ${S}/>
+    <g class="a a-nod">
+      <path d="M44 20 L42 6 L54 15Z M74 20 L78 6 L66 15Z" fill="${C.yellow}" ${S}/>
+      <circle cx="60" cy="28" r="15" fill="${C.yellow}" ${S}/>
+      <ellipse cx="60" cy="34" rx="7" ry="5" fill="${WHITE}" stroke="${INK}" stroke-width="2"/>
+      <circle cx="54" cy="25" r="1.9" fill="${INK}"/><circle cx="66" cy="25" r="1.9" fill="${INK}"/>
+      <ellipse cx="60" cy="31.5" rx="2.6" ry="2" fill="${INK}"/>
+      <ellipse cx="49" cy="31" rx="2.6" ry="1.6" fill="${C.coral}"/><ellipse cx="71" cy="31" rx="2.6" ry="1.6" fill="${C.coral}"/>
+    </g></svg>`,
+  tower: `<svg viewBox="0 0 120 84" aria-hidden="true">
+    <path d="M0 80 H120" ${S}/>
+    <g transform="translate(60 80) scale(0.44)">${tower}</g>
+    ${[[22,22,0],[96,16,-1.5],[100,44,-3],[18,52,-2]].map(([x,y,d])=>`<g class="a a-float" style="animation-delay:${d}s"><path d="M${x} ${y-6} L${x+1.8} ${y-1.8} L${x+6} ${y} L${x+1.8} ${y+1.8} L${x} ${y+6} L${x-1.8} ${y+1.8} L${x-6} ${y} L${x-1.8} ${y-1.8}Z" fill="${C.yellow}" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/></g>`).join("")}</svg>`
+};
 
-const TRIPS=[
-{
-  id:"tokyo-dec", short:"東京 12月", title:"東京",
-  period:"2026年12月16日 − 12月23日", start:"2026-12-16", end:"2026-12-23",
-  illu:"tokyo", ski:false,
-  blurb:"酷航去回、東橫大手町與 Belken Hotel Kanda。12月18日至20日行事曆沒有住宿或行程。",
-  flights:[
-    {title:"酷航桃園機場T1", date:"2026-12-16", startt:"14:00", endt:"18:00", note:"行事曆未寫航班代號與抵達機場。"},
-    {title:"酷航成田（T1)", date:"2026-12-23", startt:"18:55", endt:"22:10", note:"行事曆未寫航班代號與抵達地。"}
-  ],
-  hotels:[
-    {title:"住宿：東橫大手町", checkin:"2026-12-16", checkout:"2026-12-18", allDay:true},
-    {title:"住宿：Belken Hotel Kanda", checkin:"2026-12-21", checkout:"2026-12-24", allDay:true}
-  ],
-  events:{
-    "2026-12-16":[
-      {type:"fly", time:"14:00", time2:"18:00", title:"酷航桃園機場T1", detail:"14:00–18:00（台北時間）"},
-      {type:"stay", time:"住宿", title:"入住 東橫大手町", detail:"全日活動，退房日 12月18日"}
-    ],
-    "2026-12-17":[
-      {type:"stay", time:"住宿", title:"東橫大手町", detail:"續住，退房日 12月18日"}
-    ],
-    "2026-12-18":[
-      {type:"stay", time:"退房", title:"東橫大手町 退房", detail:"全日活動的退房日為 12月18日"},
-      {type:"gap", time:"—", title:"行事曆尚無其他行程", detail:"這天到 12月20日，行事曆沒有下一筆住宿或活動。"}
-    ],
-    "2026-12-19":[
-      {type:"gap", time:"—", title:"行事曆尚無行程", detail:"未登記住宿或活動。"}
-    ],
-    "2026-12-20":[
-      {type:"gap", time:"—", title:"行事曆尚無行程", detail:"未登記住宿或活動。"}
-    ],
-    "2026-12-21":[
-      {type:"stay", time:"住宿", title:"入住 Belken Hotel Kanda", detail:"全日活動，退房日 12月24日"}
-    ],
-    "2026-12-22":[
-      {type:"stay", time:"住宿", title:"Belken Hotel Kanda", detail:"續住，退房日 12月24日"}
-    ],
-    "2026-12-23":[
-      {type:"stay", time:"住宿", title:"Belken Hotel Kanda", detail:"續住，退房日 12月24日"},
-      {type:"fly", time:"18:55", time2:"22:10", title:"酷航成田（T1)", detail:"18:55–22:10（台北時間）"}
-    ]
-  }
-},
-{
-  id:"hokkaido-ski", short:"北海道滑雪", title:"北海道滑雪",
-  period:"2027年1月22日 − 1月31日", start:"2027-01-22", end:"2027-01-31",
-  illu:"ski", ski:true,
-  blurb:"行事曆有兩筆重疊的「北海道滑雪」：ETING 的飲食紀錄為全日 1/22–1/31（並邀請 pspdan092 已接受），主日曆另有時段事件 1/22 19:00–1/31 20:00。沒有航班、住宿或每日細項。",
-  flights:[],
-  hotels:[],
-  overlapNote:"兩筆事件標題相同、日期重疊，內容都沒有更細的地點或說明。",
-  events:Object.fromEntries(rangeDays("2027-01-22","2027-01-31").map(d=>{
-    const ev=[{type:"act", time:d==="2027-01-22"?"19:00":"全日", title:"北海道滑雪",
-      detail:d==="2027-01-22"?"主日曆時段自 19:00 起；ETING 日曆為全日（至 2月1日退房式結束）。":
-              d==="2027-01-31"?"主日曆時段至 20:00；ETING 日曆全日最後一天。":
-              "ETING 日曆全日；主日曆為跨日時段事件中。"}];
-    return [d,ev];
-  }))
-},
-{
-  id:"tokyo-ski", short:"東京滑雪", title:"東京滑雪",
-  period:"2027年2月8日 − 2月17日", start:"2027-02-08", end:"2027-02-17",
-  illu:"tokyoski", ski:true,
-  blurb:"2月8日 ANA 松山飛羽田，滑雪區塊為 2/9–2/15，2月17日 ANA 羽田飛札幌。沒有住宿紀錄。2月16日行事曆是空的。",
-  flights:[
-    {title:"ANA 松山飛羽田", date:"2027-02-08", startt:"16:50", endt:"20:40", note:"行事曆未寫航班代號。"},
-    {title:"ANA_羽田飛札幌", date:"2027-02-17", startt:"12:00", endt:"13:35", note:"行事曆未寫航班代號。此班在滑雪區塊結束兩天後。"}
-  ],
-  hotels:[],
-  events:{
-    "2027-02-08":[
-      {type:"fly", time:"16:50", time2:"20:40", title:"ANA 松山飛羽田", detail:"16:50–20:40（台北時間）"}
-    ],
-    "2027-02-09":[
-      {type:"act", time:"19:00", title:"東京滑雪", detail:"主日曆時段自 19:00 起；ETING 日曆為全日（2/9–2/15）。"}
-    ],
-    "2027-02-10":[{type:"act", time:"全日", title:"東京滑雪", detail:"ETING 日曆全日；主日曆為跨日時段事件中。"}],
-    "2027-02-11":[{type:"act", time:"全日", title:"東京滑雪", detail:"ETING 日曆全日；主日曆為跨日時段事件中。"}],
-    "2027-02-12":[{type:"act", time:"全日", title:"東京滑雪", detail:"ETING 日曆全日；主日曆為跨日時段事件中。"}],
-    "2027-02-13":[{type:"act", time:"全日", title:"東京滑雪", detail:"ETING 日曆全日；主日曆為跨日時段事件中。"}],
-    "2027-02-14":[{type:"act", time:"全日", title:"東京滑雪", detail:"ETING 日曆全日；主日曆為跨日時段事件中。"}],
-    "2027-02-15":[{type:"act", time:"至20:00", title:"東京滑雪", detail:"主日曆時段至 20:00；ETING 日曆全日最後一天（至 2月16日退房式結束）。"}],
-    "2027-02-16":[{type:"gap", time:"—", title:"行事曆尚無行程", detail:"滑雪區塊已結束，下一筆是 2月17日航班。"}],
-    "2027-02-17":[{type:"fly", time:"12:00", time2:"13:35", title:"ANA_羽田飛札幌", detail:"12:00–13:35（台北時間）"}]
-  }
-},
-{
-  id:"ama-hokkaido", short:"阿馬的北海道", title:"阿馬的北海道",
-  period:"2027年2月20日 − 3月1日", start:"2027-02-20", end:"2027-03-01",
-  illu:"otaru", ski:false,
-  blurb:"主日曆全日區塊 2/20–3/1。住宿在小樽：Dormy inn（入住 2/20、退房 2/25）與 omo5（入住 2/24、退房 3/1），2月24日兩筆重疊。回程「星宇札幌回台中」在 2/28 10:00–11:00，行事曆未寫航班代號，時段只有一小時。沒有去程航班。",
-  flights:[
-    {title:"星宇札幌回台中", date:"2027-02-28", startt:"10:00", endt:"11:00", note:"行事曆未寫航班代號；紀錄時段為 10:00–11:00。"}
-  ],
-  hotels:[
-    {title:"宿：Dormy inn 小樽", checkin:"2027-02-20", checkout:"2027-02-25", allDay:true,
-     location:"天然溫泉 燈之湯 多美迎PREMIUM小樽, 3-chōme-9-1 Inaho, Otaru, Hokkaido 047-0032日本"},
-    {title:"宿：omo5 小樽", checkin:"2027-02-24", checkout:"2027-03-01", allDay:true,
-     location:"OMO5 小樽 by 星野集團, 1-chōme-6-31 Ironai, Otaru, Hokkaido 047-0031日本"}
-  ],
-  events:{
-    "2027-02-20":[{type:"stay", time:"住宿", title:"入住 Dormy inn 小樽", detail:"天然溫泉 燈之湯 多美迎PREMIUM小樽\n3-chōme-9-1 Inaho, Otaru, Hokkaido 047-0032日本\n退房日 2月25日"}],
-    "2027-02-21":[{type:"stay", time:"住宿", title:"Dormy inn 小樽", detail:"續住，退房日 2月25日"}],
-    "2027-02-22":[{type:"stay", time:"住宿", title:"Dormy inn 小樽", detail:"續住，退房日 2月25日"}],
-    "2027-02-23":[{type:"stay", time:"住宿", title:"Dormy inn 小樽", detail:"續住，退房日 2月25日"}],
-    "2027-02-24":[
-      {type:"stay", time:"住宿", title:"Dormy inn 小樽", detail:"續住，退房日 2月25日"},
-      {type:"stay", time:"住宿", title:"入住 omo5 小樽", detail:"OMO5 小樽 by 星野集團\n1-chōme-6-31 Ironai, Otaru, Hokkaido 047-0031日本\n退房日 3月1日"}
-    ],
-    "2027-02-25":[
-      {type:"stay", time:"退房", title:"Dormy inn 小樽 退房", detail:"全日活動的退房日為 2月25日"},
-      {type:"stay", time:"住宿", title:"omo5 小樽", detail:"續住，退房日 3月1日"}
-    ],
-    "2027-02-26":[{type:"stay", time:"住宿", title:"omo5 小樽", detail:"續住，退房日 3月1日"}],
-    "2027-02-27":[{type:"stay", time:"住宿", title:"omo5 小樽", detail:"續住，退房日 3月1日"}],
-    "2027-02-28":[
-      {type:"fly", time:"10:00", time2:"11:00", title:"星宇札幌回台中", detail:"10:00–11:00（台北時間）"},
-      {type:"stay", time:"住宿", title:"omo5 小樽", detail:"續住，退房日 3月1日"}
-    ],
-    "2027-03-01":[
-      {type:"stay", time:"退房", title:"omo5 小樽 退房", detail:"全日活動的退房日為 3月1日。主日曆「阿馬的北海道」區塊也在這天結束。"}
-    ]
-  }
-},
-{
-  id:"osaka", short:"大阪", title:"大阪",
-  period:"2027年4月1日 − 4月6日", start:"2027-04-01", end:"2027-04-06",
-  illu:"osaka", ski:false,
-  blurb:"ETING 日曆全日區塊 4/1–4/6。住宿依序為神戶三宮、京都堀川五条、大阪心齋橋（皆 Comfort Hotel）。回程 Air Asia（T1:D7379）4/6 20:55–23:05，地點關西國際機場。沒有去程航班。4月2日退房後到 4月4日入住前，行事曆沒有住宿。",
-  flights:[
-    {title:"Air Asia(T1:D7379)", date:"2027-04-06", startt:"20:55", endt:"23:05",
-     location:"關西國際機場, 1番地 Senshūkūkōkita, Izumisano, Osaka 549-0001日本",
-     note:"航班代號依標題為 D7379。未寫抵達地。"}
-  ],
-  hotels:[
-    {title:"Comfort Hotel ERA Kobe Sannomiya", checkin:"2027-04-01", checkout:"2027-04-02",
-     cit:"16:00", cot:"11:00",
-     location:"4-chōme-2-10 Kumoidōri, Chuo Ward, Kobe, Hyogo 651-0096日本"},
-    {title:"Comfort Hotel Kyoto Horikawagojo", checkin:"2027-04-04", checkout:"2027-04-05",
-     cit:"16:00", cot:"10:00",
-     location:"134-32 Sensuichō, Shimogyo Ward, Kyoto, 600-8338日本"},
-    {title:"Comfort Hotel Osaka Shinsaibashi", checkin:"2027-04-05", checkout:"2027-04-06",
-     cit:"16:00", cot:"11:00",
-     location:"日本〒542-0083 Osaka, Chuo Ward, Higashishinsaibashi, 1-chōme−15−15 いちご心斎橋ビル"}
-  ],
-  events:{
-    "2027-04-01":[
-      {type:"stay", time:"16:00", title:"入住 Comfort Hotel ERA Kobe Sannomiya", detail:"16:00 入住，翌日 11:00 退房\n4-chōme-2-10 Kumoidōri, Chuo Ward, Kobe, Hyogo 651-0096日本"}
-    ],
-    "2027-04-02":[
-      {type:"stay", time:"11:00", title:"Comfort Hotel ERA Kobe Sannomiya 退房", detail:"11:00 退房"},
-      {type:"gap", time:"—", title:"行事曆尚無其他行程", detail:"下一筆住宿是 4月4日 16:00 京都堀川五条。"}
-    ],
-    "2027-04-03":[
-      {type:"gap", time:"—", title:"行事曆尚無行程", detail:"未登記住宿或活動。"}
-    ],
-    "2027-04-04":[
-      {type:"stay", time:"16:00", title:"入住 Comfort Hotel Kyoto Horikawagojo", detail:"16:00 入住，翌日 10:00 退房\n134-32 Sensuichō, Shimogyo Ward, Kyoto, 600-8338日本"}
-    ],
-    "2027-04-05":[
-      {type:"stay", time:"10:00", title:"Comfort Hotel Kyoto Horikawagojo 退房", detail:"10:00 退房"},
-      {type:"stay", time:"16:00", title:"入住 Comfort Hotel Osaka Shinsaibashi", detail:"16:00 入住，翌日 11:00 退房\nOsaka, Chuo Ward, Higashishinsaibashi, 1-chōme−15−15 いちご心斎橋ビル"}
-    ],
-    "2027-04-06":[
-      {type:"stay", time:"11:00", title:"Comfort Hotel Osaka Shinsaibashi 退房", detail:"11:00 退房"},
-      {type:"fly", time:"20:55", time2:"23:05", title:"Air Asia(T1:D7379)", detail:"20:55–23:05（台北時間）\n關西國際機場"}
-    ]
-  }
-}
-];
+const ICONS = {
+  plane:`<path d="M3 13 L21 6 L17 20 L12 15 L8 18Z" fill="${WHITE}" ${S}/>`,
+  cal:`<rect x="3" y="5" width="18" height="16" rx="4" fill="${WHITE}" ${S}/><path d="M3 10 H21 M8 3 V7 M16 3 V7" ${S}/>`,
+  star:`<path d="M12 3 L14.6 9 L21 9.5 L16 13.6 L17.6 20 L12 16.5 L6.4 20 L8 13.6 L3 9.5 L9.4 9Z" fill="${WHITE}" ${S}/>`,
+  house:`<path d="M3 11 L12 4 L21 11 V20 H3Z" fill="${WHITE}" ${S}/><rect x="10" y="14" width="4" height="6" fill="${C.coral}" stroke="${INK}" stroke-width="2"/>`,
+  clip:`<rect x="5" y="4" width="14" height="17" rx="3" fill="${WHITE}" ${S}/><path d="M9 10 H15 M9 14 H15" ${S}/>`,
+  bag:`<rect x="4" y="8" width="16" height="13" rx="3" fill="${WHITE}" ${S}/><path d="M9 8 V5 H15 V8" fill="none" ${S}/>`
+};
+document.querySelectorAll("[data-icon]").forEach(el=>{
+  el.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">${ICONS[el.dataset.icon]}</svg>`;
+});
 
-let current=TRIPS[0].id;
-let currentSec="home";
-let currentDay={};
+const MOVES = {
+  plane:{ label:"飛機", color:C.coral, svg:`<path d="M2 9 L14 4 L11.5 13 L8.5 10 L5.5 12Z" fill="none" stroke="${INK}" stroke-width="1.8" stroke-linejoin="round"/>` },
+  train:{ label:"電車", color:C.mizu, svg:`<rect x="3" y="2" width="10" height="10" rx="3" fill="none" stroke="${INK}" stroke-width="1.8"/><path d="M3 7 H13 M5 15 L6.5 12 M11 15 L9.5 12" stroke="${INK}" stroke-width="1.8" stroke-linecap="round"/>` },
+  subway:{ label:"地鐵", color:"#CFE6F0", svg:`<circle cx="8" cy="8" r="6" fill="none" stroke="${INK}" stroke-width="1.8"/><path d="M5 10.5 V5.5 L8 8.5 L11 5.5 V10.5" fill="none" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/>` },
+  bus:{ label:"巴士", color:C.yellow, svg:`<rect x="2" y="3" width="12" height="9" rx="2" fill="none" stroke="${INK}" stroke-width="1.8"/><path d="M2 8 H14" stroke="${INK}" stroke-width="1.8"/><circle cx="5" cy="13.5" r="1.3" fill="${INK}"/><circle cx="11" cy="13.5" r="1.3" fill="${INK}"/>` },
+  walk:{ label:"步行", color:C.green, svg:`<ellipse cx="5.5" cy="6" rx="2.2" ry="3.4" fill="${INK}"/><ellipse cx="10.5" cy="10" rx="2.2" ry="3.4" fill="${INK}"/>` }
+};
 
-function $(id){return document.getElementById(id)}
-function trip(){return TRIPS.find(t=>t.id===current)}
+/* ---------- 狀態（存在這台裝置） ---------- */
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+};
+let checks = store.get("trip-checks-v2", null);
+if (!checks){  // 把舊版京阪清單的勾選紀錄搬過來
+  const old = store.get("trip-checks-v1", {}); checks = {};
+  Object.keys(old).forEach(k=>{ if (old[k]) checks["kansai:"+k] = true; });
+}
+let trip = TRIPS.find(t=>t.id === store.get("trip-current", "")) || TRIPS[0];
 
-function countdownHtml(t){
-  const today=todayIso();
-  const n=daysBetween(today,t.start);
-  let head,body;
-  if(n>0){head=n;body="天後出發";}
-  else if(today>=t.start && today<=t.end){head="旅行中";body="今天在行程裡";}
-  else {head="已結束";body="這趟已過";}
-  const num=typeof head==="number"?`<p class="big">${head}<em>天</em></p>`:`<p class="big" style="font-size:36px">${head}</p>`;
-  return `<div class="card yellow"><p class="kicker">出發倒數</p>${num}<p class="note">${body} · 以台北時間計算，今天是 ${fmtFull(today)}</p></div>`;
-}
+/* ---------- 切換旅程 ---------- */
+const switchEl = document.getElementById("switch");
+switchEl.innerHTML = `<span class="lbl">我的旅程</span>` + TRIPS.map(t=>
+  `<button class="sw" type="button" data-id="${t.id}" aria-pressed="false">${esc(t.label)}${t.tag?`<em>${esc(t.tag)}</em>`:""}</button>`).join("");
+switchEl.addEventListener("click", e=>{
+  const b = e.target.closest(".sw"); if (!b || b.dataset.id === trip.id) return;
+  trip = TRIPS.find(t=>t.id === b.dataset.id);
+  store.set("trip-current", trip.id);
+  renderTrip(true);
+});
 
-function renderTripBar(){
-  $("tripBar").innerHTML=TRIPS.map(t=>`<button class="trip-btn${t.id===current?" on":""}" data-id="${t.id}" role="tab" aria-selected="${t.id===current}">${t.short}</button>`).join("");
+/* ---------- 首頁與倒數 ---------- */
+const cdEl = document.getElementById("countdown");
+const tiles = [["天",C.coral],["時",C.yellow],["分",C.mizu],["秒",C.green]];
+let cdMode = null;
+function tick(){
+  const now = Date.now(), s0 = new Date(trip.start).getTime(), e0 = new Date(trip.end).getTime();
+  if (now < s0){
+    if (cdMode !== "count"){
+      cdMode = "count";
+      cdEl.innerHTML = `<p class="cd-label">距離出發還有</p><div class="cd-grid">${tiles.map(([u,c])=>`<div class="cd-tile" style="background:${c}"><b>0</b><span>${u}</span></div>`).join("")}</div>`;
+    }
+    const s = Math.floor((s0-now)/1000);
+    const v = [Math.floor(s/86400), Math.floor(s%86400/3600), Math.floor(s%3600/60), s%60];
+    cdEl.querySelectorAll(".cd-tile b").forEach((b,i)=>{ b.textContent = i===0 ? v[i] : String(v[i]).padStart(2,"0"); });
+  } else if (now < e0){
+    if (cdMode !== "on"){ cdMode="on"; const d = Math.floor((now-s0)/86400000)+1; cdEl.innerHTML = `<div class="cd-msg">旅途進行中，今天是第 ${d} 天，玩得開心！</div>`; }
+  } else if (cdMode !== "done"){ cdMode="done"; cdEl.innerHTML = `<div class="cd-msg">旅程結束，歡迎回家！</div>`; }
 }
-function renderHome(){
-  const t=trip();
-  $("sec-home").innerHTML=`
-    <div class="hero">
-      <div class="illu">${ILLU[t.illu]}</div>
-      <h2 class="ttl">${t.title}</h2>
-      <p class="sub">${t.period}</p>
-    </div>
-    ${countdownHtml(t)}
-    <div class="card">
-      <p class="kicker">這趟現有資料</p>
-      <p class="note">${t.blurb}</p>
-      <p class="note muted">航班 ${t.flights.length} 筆 · 住宿 ${t.hotels.length} 筆</p>
-    </div>`;
-}
-function renderFlights(){
-  const t=trip();
-  if(!t.flights.length){
-    $("sec-flights").innerHTML=`<h3 class="sec-title">航班</h3><div class="empty">這趟行事曆沒有航班紀錄。</div>`;
-    return;
-  }
-  $("sec-flights").innerHTML=`<h3 class="sec-title">航班</h3>`+t.flights.map(f=>`
-    <div class="card water">
-      <span class="tag fly">飛機</span>
-      <h3 style="margin:8px 0 0;font-size:20px;font-weight:400">${f.title}</h3>
-      <p class="note">${fmtFull(f.date)}</p>
-      <p class="big" style="font-size:32px;margin-top:6px">${f.startt}<em style="font-size:16px;margin:0 8px">→</em>${f.endt}</p>
-      ${f.location?`<p class="note">${f.location}</p>`:""}
-      ${f.note?`<p class="muted">${f.note}</p>`:""}
-    </div>`).join("");
-}
-function renderDays(){
-  const t=trip();
-  const days=rangeDays(t.start,t.end);
-  if(!currentDay[t.id]) currentDay[t.id]=days[0];
-  const day=currentDay[t.id];
-  const evs=t.events[day]||[];
-  $("sec-days").innerHTML=`
-    <h3 class="sec-title">每日行程</h3>
-    <div class="days-bar">${days.map(d=>{
-      const dt=new Date(d+"T12:00:00+08:00");
-      const [y,m,dd]=d.split("-");
-      return `<button class="day-btn${d===day?" on":""}" data-day="${d}"><span class="md">${Number(m)}/${Number(dd)}</span><span class="wk">週${WEEK[dt.getDay()]}</span></button>`;
-    }).join("")}</div>
-    <div id="tlWrap" class="bounce">
-      <p class="muted" style="margin:0 0 10px">${fmtFull(day)}</p>
-      ${evs.length?`<div class="timeline">${evs.map(e=>`
-        <div class="tl-item ${e.type}">
-          <div class="tl-time">${e.time}${e.time2?"<br>"+e.time2:""}</div>
-          <div class="tl-dot"></div>
-          <div class="tl-body">
-            <span class="tag ${e.type==="fly"?"fly":e.type==="stay"?"stay":e.type==="gap"?"warn":"act"}">${e.type==="fly"?"飛機":e.type==="stay"?"住宿":e.type==="gap"?"待補":"行程"}</span>
-            <h3>${e.title}</h3>
-            ${e.detail?`<p>${e.detail.replace(/\n/g,"<br>")}</p>`:""}
-          </div>
-        </div>`).join("")}</div>`:
-        `<div class="empty">這天行事曆沒有登記行程。</div>`}
-    </div>`;
-  const on=document.querySelector(".day-btn.on");
-  if(on) on.scrollIntoView({inline:"center",block:"nearest",behavior:"instant"});
-}
-function renderHotels(){
-  const t=trip();
-  if(!t.hotels.length){
-    $("sec-hotels").innerHTML=`<h3 class="sec-title">住宿</h3><div class="empty">這趟行事曆沒有住宿紀錄。</div>`;
-    return;
-  }
-  $("sec-hotels").innerHTML=`<h3 class="sec-title">住宿</h3>`+t.hotels.map(h=>`
-    <div class="card green">
-      <span class="tag stay">住宿</span>
-      <h3 style="margin:8px 0 0;font-size:20px;font-weight:400">${h.title}</h3>
-      <p class="note">入住 ${fmtFull(h.checkin)}${h.cit?" "+h.cit:""}<br>退房 ${fmtFull(h.checkout)}${h.cot?" "+h.cot:""}</p>
-      ${h.location?`<p class="note">${h.location}</p>`:""}
-      ${h.allDay?`<p class="muted">全日活動，退房日為結束日（不含當晚）。</p>`:""}
-    </div>`).join("");
-}
-function listKey(kind){return "travel-techo-"+current+"-"+kind}
-function loadList(kind, defaults){
-  try{
-    const raw=localStorage.getItem(listKey(kind));
-    if(raw){const arr=JSON.parse(raw);if(Array.isArray(arr)) return arr;}
-  }catch(e){}
-  return defaults.map((text,i)=>({id:kind+"-"+i,text,done:false}));
-}
-function saveList(kind, arr){try{localStorage.setItem(listKey(kind),JSON.stringify(arr))}catch(e){}}
-function listBlock(title, kind, items, canAdd){
-  return `<div class="card" data-list="${kind}">
-    <h3 class="sec-title" style="margin-top:0">${title}</h3>
-    <ul class="list">${items.map(it=>`
-      <li class="${it.done?"done":""}">
-        <input type="checkbox" id="${it.id}" ${it.done?"checked":""}>
-        <label for="${it.id}">${it.text}</label>
-      </li>`).join("")||`<li class="muted" style="border:0">還沒有項目。</li>`}</ul>
-    ${canAdd?`<div class="add-row"><input type="text" placeholder="新增一項…" aria-label="新增${title}"><button type="button">加入</button></div>`:""}
-  </div>`;
-}
-function renderLists(){
-  const t=trip();
-  const todo=loadList("todo", []);
-  const pre=loadList("pre", PRE);
-  const bag=loadList("bag", t.ski?BAG.concat(SKI):BAG);
-  $("sec-lists").innerHTML=`<h3 class="sec-title">清單</h3>
-    ${listBlock("待辦清單","todo",todo,true)}
-    ${listBlock("出發前清單","pre",pre,true)}
-    ${listBlock(t.ski?"行李清單（含滑雪裝備）":"行李清單","bag",bag,true)}`;
-}
-function showSec(sec){
-  currentSec=sec;
-  document.querySelectorAll("nav.menu button").forEach(b=>b.classList.toggle("on",b.dataset.sec===sec));
-  ["home","flights","days","hotels","lists"].forEach(s=>{
-    const el=$("sec-"+s);
-    el.classList.toggle("show",s===sec);
+setInterval(tick, 1000);
+
+/* ---------- 每日行程 ---------- */
+const tabsEl = document.getElementById("tabs"), panel = document.getElementById("dayPanel");
+function renderDay(i, animate){
+  const d = trip.days[i];
+  tabsEl.querySelectorAll(".tab").forEach((t,j)=>{
+    const on = j===i; t.setAttribute("aria-selected", on); t.tabIndex = on ? 0 : -1;
   });
-  const render={home:renderHome,flights:renderFlights,days:renderDays,hotels:renderHotels,lists:renderLists};
-  render[sec]();
-  window.scrollTo(0,0);
-}
-function selectTrip(id){
-  current=id;
-  renderTripBar();
-  showSec(currentSec==="home"?"home":currentSec);
-}
-
-document.addEventListener("click",e=>{
-  const tb=e.target.closest(".trip-btn");
-  if(tb){selectTrip(tb.dataset.id);return}
-  const mb=e.target.closest("nav.menu button");
-  if(mb){showSec(mb.dataset.sec);return}
-  const db=e.target.closest(".day-btn");
-  if(db){
-    currentDay[current]=db.dataset.day;
-    renderDays();
-    const wrap=$("tlWrap");
-    if(wrap){wrap.classList.remove("bounce");void wrap.offsetWidth;wrap.classList.add("bounce")}
+  panel.setAttribute("aria-labelledby", `tab-${i}`);
+  const head = `<div class="card day-head" style="--i:0">${DAY_ART[d.art]||""}<div><h3>${esc(d.title)}</h3><p>${esc(d.area||"")}</p></div></div>`;
+  if (!d.items.length){
+    panel.innerHTML = `${head}<div class="cd-msg">行事曆尚無資料</div>`;
+    if (animate && !reduceMotion.matches){ replay(panel, "pop"); replay(tabsEl.children[i], "boing"); }
     return;
   }
-  const add=e.target.closest("[data-list] .add-row button");
-  if(add){
-    const box=add.closest("[data-list]");
-    const kind=box.dataset.list;
-    const input=box.querySelector("input[type=text]");
-    const text=(input.value||"").trim();
-    if(!text) return;
-    const defaults=kind==="pre"?PRE:kind==="bag"?(trip().ski?BAG.concat(SKI):BAG):[];
-    const arr=loadList(kind,defaults);
-    arr.push({id:kind+"-"+Date.now(),text,done:false});
-    saveList(kind,arr);input.value="";renderLists();return;
+  panel.innerHTML = `
+    ${head}
+    <ol class="tl">${d.items.map((it,k)=>{
+      const first = it.move && it.move[0];
+      return `<li class="tl-item" style="--i:${k+1}">
+        <div class="tl-time">${it.t}</div>
+        <div class="tl-rail"><span class="tl-dot" style="background:${first?MOVES[first].color:WHITE}"></span></div>
+        <div class="tl-card${it.must?" must":""}">
+          ${it.must?`<span class="stamp" aria-label="必去">必去</span>`:""}
+          <h4>${esc(it.title)}</h4>
+          ${it.note?`<p>${esc(it.note)}</p>`:""}
+          ${it.move?`<div class="tags">${it.move.map(m=>`<span class="tag" style="background:${MOVES[m].color}"><svg viewBox="0 0 16 16" aria-hidden="true">${MOVES[m].svg}</svg>${MOVES[m].label}</span>`).join("")}</div>`:""}
+        </div></li>`;}).join("")}
+    </ol>`;
+  if (animate && !reduceMotion.matches){
+    replay(panel, "pop");
+    replay(tabsEl.children[i], "boing");
   }
+}
+tabsEl.addEventListener("click", e=>{
+  const t = e.target.closest(".tab"); if (!t) return;
+  renderDay(+t.dataset.i, true);
+  t.scrollIntoView({block:"nearest", inline:"center", behavior: reduceMotion.matches ? "auto" : "smooth"});
 });
-document.addEventListener("change",e=>{
-  const box=e.target.closest("[data-list]");
-  if(!box||e.target.type!=="checkbox")return;
-  const kind=box.dataset.list;
-  const defaults=kind==="pre"?PRE:kind==="bag"?(trip().ski?BAG.concat(SKI):BAG):[];
-  const arr=loadList(kind,defaults);
-  const it=arr.find(x=>x.id===e.target.id);
-  if(it){it.done=e.target.checked;saveList(kind,arr);e.target.closest("li").classList.toggle("done",it.done)}
-});
-document.addEventListener("keydown",e=>{
-  if(e.key!=="Enter")return;
-  const input=e.target.closest("[data-list] .add-row input");
-  if(!input)return;
-  const btn=input.parentElement.querySelector("button");
-  if(btn)btn.click();
+tabsEl.addEventListener("keydown", e=>{
+  if (!["ArrowLeft","ArrowRight"].includes(e.key)) return;
+  const cur = +document.activeElement.dataset.i, n = trip.days.length;
+  const next = (cur + (e.key==="ArrowRight"?1:-1) + n) % n;
+  renderDay(next, true); tabsEl.children[next].focus();
 });
 
-(function init(){
-  const q=new URLSearchParams(location.search);
-  if(q.get("trip")&&TRIPS.some(t=>t.id===q.get("trip"))) current=q.get("trip");
-  if(q.get("day")) currentDay[current]=q.get("day");
-  const view=q.get("view")||"home";
-  renderTripBar();
-  showSec(["home","flights","days","hotels","lists"].includes(view)?view:"home");
-})();
+/* ---------- 住宿 ---------- */
+const houseArt = c => `<svg viewBox="0 0 56 56" aria-hidden="true">
+  <path d="M6 26 L28 8 L50 26 V50 H6Z" fill="${WHITE}" ${S}/>
+  <path d="M2 28 L28 6 L54 28 L50 31 L28 13 L6 31Z" fill="${c}" ${S}/>
+  <rect x="22" y="34" width="12" height="16" rx="2" fill="${C.yellow}" stroke="${INK}" stroke-width="2.5"/>
+  <rect x="12" y="32" width="7" height="7" rx="1.5" fill="${C.mizu}" stroke="${INK}" stroke-width="2"/>
+  <rect x="37" y="32" width="7" height="7" rx="1.5" fill="${C.mizu}" stroke="${INK}" stroke-width="2"/></svg>`;
+
+/* ---------- 可打勾清單 ---------- */
+const tick18 = `<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3 9.5 L7.5 14 L15 4.5" fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const barColor = { todo:C.coral, prep:C.mizu, pack:C.yellow };
+const keyOf = id => `${trip.id}:${id}`;
+const item = (id, text, note) => `<li><label class="check"><input type="checkbox" data-id="${id}" ${checks[keyOf(id)]?"checked":""}><span class="box">${tick18}</span><span class="txt">${esc(text)}${note?`<span class="note">${esc(note)}</span>`:""}</span></label></li>`;
+function updateList(el){
+  const boxes = el.querySelectorAll("input"), done = [...boxes].filter(b=>b.checked).length, pct = boxes.length ? done/boxes.length*100 : 0;
+  el.querySelector(".count").textContent = done === boxes.length ? "全部完成！" : `${done} / ${boxes.length}`;
+  el.querySelector(".bar i").style.width = pct + "%";
+  el.querySelector(".bar").setAttribute("aria-valuenow", Math.round(pct));
+}
+function renderList(el){
+  const name = el.dataset.list, data = trip.lists[name] || [];
+  if (!data.length){
+    el.innerHTML = `<div class="cd-msg">行事曆尚無資料</div>`;
+    return;
+  }
+  const body = name === "pack"
+    ? data.map((g,gi)=>`<div class="grp"><i style="background:${g.color}"></i>${esc(g.group)}</div><ul class="checks">${g.items.map((t,ii)=>item(`pack-${gi}-${ii}`, t)).join("")}</ul>`).join("")
+    : `<ul class="checks">${data.map((it,ii)=>item(`${name}-${ii}`, it.text, it.note)).join("")}</ul>`;
+  el.innerHTML = `<div class="list-head"><div class="bar" role="progressbar" aria-label="完成進度" aria-valuemin="0" aria-valuemax="100"><i style="background:${barColor[name]}"></i></div><span class="count"></span><button class="reset" type="button">重設</button></div>${body}`;
+  updateList(el);
+}
+document.querySelectorAll("[data-list]").forEach(el=>{
+  el.addEventListener("change", e=>{
+    const id = e.target.dataset.id; if (!id) return;
+    if (e.target.checked) checks[keyOf(id)] = true; else delete checks[keyOf(id)];
+    store.set("trip-checks-v2", checks); updateList(el);
+  });
+  el.addEventListener("click", e=>{
+    if (!e.target.closest(".reset")) return;
+    el.querySelectorAll("input").forEach(b=>{ b.checked = false; delete checks[keyOf(b.dataset.id)]; });
+    store.set("trip-checks-v2", checks); updateList(el);
+  });
+});
+
+/* ---------- 整趟旅程重畫 ---------- */
+function renderTrip(animate){
+  document.title = `${trip.title} ${trip.subtitle}`;
+  switchEl.querySelectorAll(".sw").forEach(b=>b.setAttribute("aria-pressed", b.dataset.id === trip.id));
+
+  const art = document.getElementById("heroArt"), h = HERO[trip.hero] || HERO.tokyo;
+  art.innerHTML = h.svg(); art.setAttribute("aria-label", h.label);
+  document.getElementById("tripTitle").textContent = trip.title;
+  document.getElementById("tripSub").textContent = trip.subtitle;
+  document.getElementById("tripDates").textContent = trip.dates;
+  cdMode = null; tick();
+
+  document.getElementById("flights").innerHTML = trip.flights.length ? trip.flights.map(f=>`
+    <article class="card pass">
+      <div class="pass-top">
+        <span class="pill" style="background:${f.dir==="去程"?C.coral:C.mizu}">${esc(f.dir)}</span>
+        <span>${esc(f.date)}</span>
+        <span class="no">${esc(f.airline)}${f.no?"　"+esc(f.no):""}</span>
+      </div>
+      <div class="route">
+        <div class="port"><b>${f.from.code}</b><span>${esc(f.from.city)}</span><span class="t">${f.from.time}</span></div>
+        <svg viewBox="0 0 120 40" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <path d="M6 28 Q60 2 114 28" fill="none" stroke="${INK}" stroke-width="2.5" stroke-dasharray="5 6" stroke-linecap="round"/>
+          <g transform="translate(60 15)"><g class="a a-float"><path d="M-11 2 L11 -6 L7 8 L2 3 L-4 6Z" fill="${C.yellow}" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/></g></g>
+        </svg>
+        <div class="port r"><b>${f.to.code}</b><span>${esc(f.to.city)}</span><span class="t">${f.to.time}</span></div>
+      </div>
+      <div class="pass-cut"></div>
+      <dl class="pass-info">
+        <div><dt>飛行時間</dt><dd>${esc(f.dur)}</dd></div>
+        <div><dt>航廈</dt><dd>${esc(f.term)}</dd></div>
+        <div><dt>行李</dt><dd>${esc(f.bag)}</dd></div>
+      </dl>
+    </article>`).join("") : `<div class="cd-msg">行事曆尚無資料</div>`;
+
+  if (!trip.days.length){
+    tabsEl.innerHTML = "";
+    panel.innerHTML = `<div class="cd-msg">行事曆尚無資料</div>`;
+  } else {
+  tabsEl.innerHTML = trip.days.map((d,i)=>`
+    <button class="tab" role="tab" id="tab-${i}" aria-controls="dayPanel" aria-selected="false" tabindex="-1" data-i="${i}">
+      <small>第 ${i+1} 天</small><b>${d.date}</b><small>${d.week}</small>
+    </button>`).join("");
+  let today = 0;
+  const now = Date.now(), s0 = new Date(trip.start).getTime(), e0 = new Date(trip.end).getTime();
+  if (now >= s0 && now < e0) today = Math.min(Math.floor((now-s0)/86400000), trip.days.length-1);
+  renderDay(today, false);
+  tabsEl.scrollLeft = 0;
+  }
+
+  document.getElementById("stays").innerHTML = trip.stays.length ? trip.stays.map(s=>`
+    <article class="card stay">
+      <div class="stay-top">${houseArt(s.color)}<div><h3>${esc(s.name)}</h3><p>${esc(s.city)}　${esc(s.nights)}</p></div></div>
+      <dl>
+        <dt>入住</dt><dd>${esc(s.checkin)}</dd>
+        <dt>退房</dt><dd>${esc(s.checkout)}</dd>
+        <dt>地址</dt><dd>${esc(s.addr)}</dd>
+        <dt>交通</dt><dd>${esc(s.access)}</dd>
+        <dt>備註</dt><dd>${esc(s.memo)}</dd>
+      </dl>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.map)}" target="_blank" rel="noopener">在地圖上開啟</a>
+    </article>`).join("") : `<div class="cd-msg">行事曆尚無資料</div>`;
+
+  document.querySelectorAll("[data-list]").forEach(renderList);
+
+  if (animate && !reduceMotion.matches){
+    replay(art, "pop"); replay(document.getElementById("heroText"), "pop");
+  }
+}
+renderTrip(false);
+
+/* ---------- 頁尾 ---------- */
+document.getElementById("foot").innerHTML = `<svg viewBox="0 0 150 60" aria-hidden="true">
+  <path d="M10 52 H140" ${S}/>
+  <g transform="translate(40 8)"><g class="a a-bob">
+    <rect x="0" y="10" width="44" height="34" rx="8" fill="${C.coral}" ${S}/>
+    <path d="M14 10 V3 H30 V10" fill="none" ${S}/>
+    <path d="M0 24 H44" ${S}/>
+    <circle cx="10" cy="46" r="4" fill="${WHITE}" stroke="${INK}" stroke-width="2.5"/><circle cx="34" cy="46" r="4" fill="${WHITE}" stroke="${INK}" stroke-width="2.5"/>
+  </g></g>
+  <g transform="translate(96 16)"><g class="a a-float">
+    <path d="M10 0 L12.8 6 L19 6.6 L14.3 10.8 L15.8 17 L10 13.7 L4.2 17 L5.7 10.8 L1 6.6 L7.2 6Z" fill="${C.yellow}" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/>
+  </g></g></svg>資料來源：Google 行事曆`;
+
+/* ---------- 選單目前位置 ---------- */
+const links = [...document.querySelectorAll(".nav a.link")];
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(en=>{
+    if (!en.isIntersecting) return;
+    links.forEach(a=>a.classList.toggle("on", a.getAttribute("href") === "#"+en.target.id));
+    const on = links.find(a=>a.classList.contains("on"));
+    if (on) on.scrollIntoView({block:"nearest", inline:"nearest"});
+  });
+}, { rootMargin:"-35% 0px -60% 0px" });
+document.querySelectorAll("main section[id]").forEach(s=>io.observe(s));
 </script>
 </body>
 </html>
